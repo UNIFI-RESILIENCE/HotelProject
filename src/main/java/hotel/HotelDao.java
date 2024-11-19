@@ -35,8 +35,8 @@ public class HotelDao {
         return roomNumber;
     }
 
-    public String prepareDescription(String roomDescription) {
-        if (roomDescription.isBlank() || roomDescription == null) {
+    public String prepareDescription(String roomDescription) throws IllegalArgumentException {
+        if (roomDescription == null || roomDescription.isBlank() ) {
             throw new IllegalArgumentException("Description cannot be empty");
         }
         boolean isNumericOnly = isNumeric(roomDescription);
@@ -46,7 +46,7 @@ public class HotelDao {
         roomDescription = roomDescription.trim();
         return roomDescription;
     }
-
+  
     public String publish(String description) throws SQLException {
         String publishedRoom = null;
 

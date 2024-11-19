@@ -17,7 +17,7 @@ public class HotelDaoTest {
 
     @Before
     public void setUp() throws SQLException {
-        // Spy on the real HotelDao object
+        // Spy on the real HotelDao object because I don't want to mock all the methods within the HotelDao object
         hotelDao = spy(new HotelDao());
 
         // Mock the database connection and other related objects
@@ -38,8 +38,7 @@ public class HotelDaoTest {
     }
 
     @Test
-    public void testCreateRoomNumber_withValidInitialNumber() {
-        // Test valid room number creation
+    public void testCreateRoomNumberWithValidInitialNumber() {
         int initialRoomNumber = 0;
         int expectedRoomNumber = 1;
         assertEquals(expectedRoomNumber, hotelDao.createRoomNumber(initialRoomNumber));
@@ -56,133 +55,102 @@ public class HotelDaoTest {
 		IllegalArgumentException e = assertThrows(IllegalArgumentException.class, ()-> hotelDao.createRoomNumber(-1));
 		assertEquals("Negative Room Number: -1",e.getMessage());
 	}
-
-    @Test
-    public void testPrepareDescription_withValidDescription() {
-        String validDescription = "A cozy room";
-        String result = hotelDao.prepareDescription(validDescription);
-        assertEquals(validDescription.trim(), result);
-    }
-
+	
 	@Test
 	public void testHotelRoomDescriptionIsEmptyThrows() {
-		//String prepareDescription = room.prepareDescription("");
 		IllegalArgumentException e = assertThrows(IllegalArgumentException.class, ()->hotelDao.prepareDescription(""));
 		assertEquals("Description cannot be empty", e.getMessage());
 	}
 
+	
 	@Test
 	public void testHotelRoomDescriptionIsNotOnlyNumbersThrows() {
 		IllegalArgumentException e = assertThrows(IllegalArgumentException.class, ()->hotelDao.prepareDescription("1"));
 		assertEquals("Description cannot be numbers only", e.getMessage());
 	}
+  
+    @Test
+    public void testPrepareDescriptionWithValidDescription() {
+        String validDescription = "A cozy room";
+        String result = hotelDao.prepareDescription(validDescription);
+        assertEquals(validDescription.trim(), result);
+    }
 
     @Test
-    public void testPublish_withValidDescription() throws SQLException {
+    public void testPublishWithValidDescription() throws SQLException {
+    	//setup
         String validDescription = "Spacious room with a beautiful view";
-
-        // Mock ResultSet to simulate getting a max ID from the database
         when(mockResultSet.next()).thenReturn(true);
-        when(mockResultSet.getInt(1)).thenReturn(1); // Returning a sample max ID
-
-        // Mock the PreparedStatement's executeUpdate method to return 1 (success)
+        when(mockResultSet.getInt(1)).thenReturn(1); //return 1 for success
         when(mockPreparedStatement.executeUpdate()).thenReturn(1);
 
-        // Test the publish method
+        // exercise
         String result = hotelDao.publish(validDescription);
 
-        // Assert the format of the published room
+        // verify
         assertNotNull(result);
         assertTrue(result.contains("Room:"));
         assertTrue(result.contains("Cost:"));
         assertTrue(result.contains("Details"));
-
-        
     }
 
     @Test
-    public void testPublish_withNoRoomSaved() throws SQLException {
-        String validDescription = "Room with no details";
-
-        // Mock ResultSet to simulate getting a max ID from the database
+    public void testPublishWithNoRoomSaved() throws SQLException {
+        //setup
+    	String validDescription = "No record saved to db";
         when(mockResultSet.next()).thenReturn(true);
-        when(mockResultSet.getInt(1)).thenReturn(1); // Returning a sample max ID
+        when(mockResultSet.getInt(1)).thenReturn(1); 
+        when(mockPreparedStatement.executeUpdate()).thenReturn(0); //return 0 for failure
 
-        // Mock the PreparedStatement's executeUpdate method to return 0 (failure)
-        when(mockPreparedStatement.executeUpdate()).thenReturn(0);
-
-        // Test the publish method
+        // exercise
         String result = hotelDao.publish(validDescription);
        
-        // Assert the result is null since no room was saved
+        // verify
         assertNull(result);
-        
     }
 
-    @Test
-    public void testPublish_withNullDescription() throws SQLException {
-        // Test null description should throw IllegalArgumentException
-        try {
-            hotelDao.publish(null);
-            //fail("Expected IllegalArgumentException for null description"); 
-        } catch (IllegalArgumentException e) {
-            // Check the exception message
-            assertEquals("Description cannot be empty", e.getMessage());
-        }
-    }
-
+    
+	@Test
+	public void testPublishWithNullDescription() {
+		IllegalArgumentException e = assertThrows(IllegalArgumentException.class, ()->hotelDao.publish(null));
+		assertEquals("Description cannot be empty", e.getMessage());
+	}
 
     @Test
     public void testGetMaxId_withExistingRecords() throws SQLException {
-        // Mock ResultSet to simulate the case where there is at least one record
+        //setup
         when(mockResultSet.next()).thenReturn(true);
         when(mockResultSet.getInt(1)).thenReturn(5); // Simulate the max ID being 5
-
+        //exercise
         int maxId = hotelDao.getMaxId(mockConnection);
-
+        //verify
         assertEquals(5, maxId);
     }
 
     @Test
-    public void testGetMaxId_withNoRecords() throws SQLException {
-        // Mock ResultSet to simulate the case where there are no records
+    public void testGetMaxIdWithNoRecords() throws SQLException {
+        //setup
         when(mockResultSet.next()).thenReturn(false);
-
+        //exercise
         int maxId = hotelDao.getMaxId(mockConnection);
-
+        //verify
         assertEquals(0, maxId);
     }
 
     @Test
-    public void testIsNumeric_withNumericInput() {
+    public void testIsNumericWithNumericInput() {
         assertTrue(HotelDao.isNumeric("12345"));
     }
 
     @Test
-    public void testIsNumeric_withNonNumericInput() {
+    public void testIsNumericWithNonNumericInput() {
         assertFalse(HotelDao.isNumeric("Room123"));
     }
 
     @Test
-    public void testIsNumeric_withEmptyInput() {
+    public void testIsNumericWithEmptyInput() {
         assertFalse(HotelDao.isNumeric(""));
     }
-    
-//    @Test
-//    public void testPrintStatement() throws SQLException {
-//        // Capture the current System.out
-//        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-//        System.setOut(new PrintStream(outContent));
-//
-//        // Call the method that prints to the console
-//        hotelDao.publish("d");
-//
-//        // Assert that the output is what you expect
-//        assertEquals("No record saved to db", outContent.toString().trim());
-//
-//        // Reset System.out to its original state
-//        System.setOut(System.out);
-//    }
     
     
 }
