@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ 17]
+        java: [8, 11, 17]
     
     name: Build with Java ${{ matrix.java }}
     steps:
@@ -37,13 +37,14 @@ jobs:
     # Build with Maven
     - name: Build with Maven ${{ matrix.java }}
       run: > 
-        mvn -f ./pom.xml 
-        clean verify
-        clean verify
+        mvn -f ./pom.xml
         surefire-report:report-only site:site -DgenerateReports=false
+      if: ${{ always()}}
 
     - name: Archive JUnit Report
       uses: actions/upload-artifact@v4
+      if: ${{ always() }}
       with:
         name: surefire-report-jdk-${{ matrix.java }}
         path: '**/target/site'
+      
