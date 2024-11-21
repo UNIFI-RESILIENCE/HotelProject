@@ -95,6 +95,10 @@
                             <id>jacoco-check</id>
                             <goals>
                                 <goal>check</goal>
+                                <!-- binds by default to the phase "initialize" -->
+								<goal>prepare-agent</goal>
+								<!-- binds by default to the phase "verify" -->
+								<goal>report</goal>
                             </goals>
                             <configuration>
                                 <rules>
@@ -118,6 +122,8 @@
                         </excludes>
                     </configuration>
                 </plugin>
+
+
 
                 <!-- Pitest plugin for mutation testing -->
                 <plugin>
@@ -223,4 +229,19 @@
             </plugin> 
         </plugins>
     </build>
+    
+	<profiles>
+		<profile>
+			<id>jacoco</id>
+				<build>
+					<plugins>
+						<plugin>
+							<!-- configured in pluginManagement -->
+							<groupId>org.jacoco</groupId>
+							<artifactId>jacoco-maven-plugin</artifactId>
+						</plugin>
+					</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

@@ -41,7 +41,8 @@ jobs:
     - name: Generate JUnit Report
       run: >
         mvn -f ./pom.xml
-        surefire-report:report-only site:site -DgenerateReports=false
+        clean verify -Pjacoco
+#        surefire-report:report-only site:site -DgenerateReports=false
       if: ${{ always() }}
 
     - name: Archive JUnit Report
