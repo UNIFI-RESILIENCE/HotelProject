@@ -1,0 +1,2 @@
+[![Java CI with Maven in Linux](https://github.com/UNIFI-RESILIENCE/HotelProject/actions/workflows/maven.yaml/badge.svg)](https://github.com/UNIFI-RESILIENCE/HotelProject/actions/workflows/maven.yaml)
+[![Coverage Status](https://coveralls.io/repos/github/UNIFI-RESILIENCE/HotelProject/badge.svg?branch=ci-coveralls)](https://coveralls.io/github/UNIFI-RESILIENCE/HotelProject?branch=ci-coveralls)
