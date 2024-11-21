@@ -4,7 +4,7 @@ on:
   push: 
     branches: 
       - main
-      - github_action
+      - ci-coveralls
   pull_request:
 
 
@@ -14,7 +14,8 @@ jobs:
     strategy:
       matrix:
         java: [17]
-    
+        additional-maven-args: ["-Pjacoco -DrepoToken=$COVERALLS_REPO_TOKEN coveralls:report"]
+         
     name: Build with Java ${{ matrix.java }}
     steps:
 
@@ -41,7 +42,9 @@ jobs:
     - name: Generate JUnit Report
       run: >
         mvn -f ./pom.xml
-        clean verify -Pjacoco
+        clean verify -Pjacoco ${{ matrix.additional-maven-args}}
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 #        surefire-report:report-only site:site -DgenerateReports=false
       if: ${{ always() }}
 
