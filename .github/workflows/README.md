@@ -1,0 +1,1 @@
+[![Java CI with Maven in Linux](https://github.com/UNIFI-RESILIENCE/HotelProject/actions/workflows/maven.yaml/badge.svg)](https://github.com/UNIFI-RESILIENCE/HotelProject/actions/workflows/maven.yaml)
