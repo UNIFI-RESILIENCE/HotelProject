@@ -53,5 +53,5 @@ jobs:
     # Build with Maven
     - name: Build with Maven ${{ matrix.java }}
       run: mvn verify -Pdocker
-      working-directory: hotel
+      working-directory: .
     #  run: mvn -f ./pom.xml clean verify
