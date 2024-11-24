@@ -272,25 +272,51 @@
 					<artifactId>docker-maven-plugin</artifactId>
 					<version>0.34.1</version>
 					<configuration>
-					<showLogs>true</showLogs>
-					<verbose>build</verbose>
-					<images>
-					<image>
-					<name>hotelroom</name>
-					<build>
-					<contextDir>${project.basedir}</contextDir> 
-						<args>
-							<jarToCopy>/hotelroom-jar-with-dependencies.jar</jarToCopy>
-						</args>
-					</build> 
-					<run> 
-					<wait>
-					<log>App started</log>
-					<time>10000</time>
-					</wait>
-					</run>
-					</image>
-					</images>
+						<showLogs>true</showLogs>
+						<verbose>build</verbose>
+						<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
+						<images>
+							<image>
+								<name>hotelroom</name>
+								<build>
+								<contextDir>${project.basedir}</contextDir> 
+									<args>
+										<jarToCopy>/hotelroom-jar-with-dependencies.jar</jarToCopy>
+									</args>
+								</build> 
+								<run> 
+									<wait>
+										<log>App started</log>
+										<time>10000</time>
+									</wait>
+									
+									<network>
+										<mode>custom</mode>
+										<name>my-network</name>
+									</network>
+									
+									<dependsOn>
+										<container>postgres</container>
+									</dependsOn>
+								</run>
+							</image>
+							
+							<image>
+								<name>postgres</name>
+								<alias>postgres</alias>
+								<run>
+								<network>
+									<mode>custom</mode>
+									<name>my-network</name>
+									<alias>postgres</alias>
+								</network>
+								<wait>
+									<log>Waiting for connections</log>
+									<time>10000</time>
+								</wait>
+								</run>
+							</image>
+						</images>
 					</configuration> 
 					<executions>
 					<execution>

@@ -43,6 +43,16 @@ jobs:
 #        surefire-report:report-only site:site -DgenerateReports=false
       if: ${{ always() }}
 
+    # Build with Maven
+    - name: Build with Maven ${{ matrix.java }}
+      run: mvn verify -Pdocker
+      working-directory: .
+    #  run: mvn -f ./pom.xml clean verify
+
+    # Build with Maven
+    - name: Build with Maven ${{ matrix.java }}
+      run: mvn -f ./pom.xml clean verify
+
     - name: Archive JUnit Report
       uses: actions/upload-artifact@v4
       if: ${{ always() }}
@@ -50,8 +60,3 @@ jobs:
         name: jacoco-report-jdk-${{ matrix.java }}
         path: '**/target/site'
 
-    # Build with Maven
-    - name: Build with Maven ${{ matrix.java }}
-      run: mvn verify -Pdocker
-      working-directory: .
-    #  run: mvn -f ./pom.xml clean verify

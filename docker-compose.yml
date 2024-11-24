@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  app:
+    image:  hotelroom  
+    networks: 
+      - my-network  
+    depends_on:
+      db:
+        condition: service_healthy
+
+ 
+  db:
+    image: postgres
+    ports:
+      - "5433:5432" 
+    restart: always
+    networks:
+      - my-network
+    environment:
+      POSTGRES_PASSWORD: /Pass@098/
+      POSTGRES_USER: root
+      PGUSER: root
+      POSTGRES_DB: hoteldb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persistent storage
+
+volumes:
+  postgres_data:
+
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+
+networks:
+  my-network:
+    driver: bridge
+
