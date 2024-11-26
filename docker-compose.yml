@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
 
   db:
@@ -24,12 +22,16 @@ services:
       
   app:
     image:  hotelroom
+    build:
+      context: .
+      dockerfile: Dockerfile
     networks: 
       - my-network  
     depends_on:
       db:
         condition: service_healthy
-
+    # command: ["sh", "-c", "ls -la / && cd app && ls -al"]
+  
 networks:
   my-network:
     driver: bridge

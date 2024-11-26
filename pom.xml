@@ -195,7 +195,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.4.2</version>
             </plugin>
-
+  
             <!-- Maven Assembly Plugin for creating an uber-jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -247,7 +247,7 @@
         </plugins>
     </build>
     
-	
+	 
 	
 	<profiles>
 		<profile>

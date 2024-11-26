@@ -8,13 +8,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.regex.Pattern;
  
-public class HotelDao {
+public class HotelDao { 
 
 	static final String MAX_ROOM_ID_SQL = "SELECT MAX(id) FROM rooms";
 	static final String INSERT_ROOM_SQL = "INSERT INTO rooms (id, room_number, room_description, room_amount) VALUES ( (SELECT MAX(id) FROM rooms) + 1, ?, ?, ?)";
 
 	private String dbUser = "dbmanager";
-	private String url = "jdbc:postgresql://localhost:5432/hoteldb";
+	private String url = "jdbc:postgresql://db:5433/hoteldb";
 	private String dbPassword = "/Pass@098/";
 
 	private int initialRoomNumber = 0;
