@@ -222,7 +222,7 @@
                 </executions>
             </plugin>
 
-            <!-- Exec Maven Plugin to run the jar -->
+            <!-- Exec Maven Plugin to run the jar 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -243,7 +243,9 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin> 
+            </plugin>   
+            
+            -->
         </plugins>
     </build>
     
@@ -270,12 +272,54 @@
 				<plugin>
 					<groupId>io.fabric8</groupId>
 					<artifactId>docker-maven-plugin</artifactId>
-					<version>0.34.1</version>
+					<version>0.45.1</version>
+					<extensions>true</extensions>
 					<configuration>
 						<showLogs>true</showLogs>
 						<verbose>build</verbose>
 						<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
+						<startParallel>true</startParallel>
+						<wait>
+						    <time>120000</time> <!-- Wait for 2 minutes -->
+						</wait>
 						<images>
+ 
+							<image> 
+								<name>postgres:17.2</name>
+								<alias>database</alias>
+								<run>
+									<env>
+									      <POSTGRES_PASSWORD>0Pass-0980</POSTGRES_PASSWORD>
+	      								  <POSTGRES_USER>dbmanager</POSTGRES_USER> 
+	      								  <POSTGRES_DB>hoteldb</POSTGRES_DB> 
+									</env>
+									<volumes>
+	                                    <bind>
+	                                    	<volume>${project.basedir}/init-scripts:/docker-entrypoint-initdb.d</volume>
+	                                       
+	                                    </bind>
+	                                </volumes>
+									<ports>
+	                                    <port>5433:5432</port>
+	                                </ports>                            
+									<network>
+										<mode>custom</mode>
+										<name>my-network</name>
+										<alias>database</alias>
+									</network>
+									<wait>
+										<log>database system is ready to accept connections</log>
+										<time>200000</time>
+										<exec>
+											<postStart>
+												pg_isready -U dbmanager -d hoteldb -h localhost
+											</postStart>
+										</exec>
+									</wait>
+								</run>
+							  
+							</image>
+							
 							<image>
 								<name>hotelroom</name>
 								<build>
@@ -285,58 +329,63 @@
 									</args>
 								</build> 
 								<run> 
-									<wait>
-										<log>App started</log>
-										<time>10000</time>
-									</wait>
-									
+								 
 									<network>
 										<mode>custom</mode>
 										<name>my-network</name>
+										<alias>app</alias>
 									</network>
+									  <env>
+									  	 <HOST_NAME>database</HOST_NAME>
+				                        <DB_USER>dbmanager</DB_USER>
+				                        <DB_URL>jdbc:postgresql://database:5432/hoteldb</DB_URL>
+				                        <DB_PASSWORD>0Pass-0980</DB_PASSWORD>
+				                     </env>  
+									<links>
+									  <link>database</link>
+									</links>
 									
-									<dependsOn>
-										<container>postgres</container>
-									</dependsOn>
+									<dependsOn>database</dependsOn>
+									
+									<wait>
+									  
+										<time>1000</time>
+									</wait>
+									 
+									<!-- 
+									<entryPoint>
+									   exec form  
+									  <arg>java</arg>
+									  <arg>-jar</arg>
+									  <arg>/hotelroom-jar-with-dependencies.jar</arg>
+									</entryPoint>
+									-->
+									
+									<cmd>java -jar /app/app.jar hotel.Main</cmd>
 								</run>
-							</image>
-							
-							<image>
-								<name>postgres</name>
-								<alias>postgres</alias>
-								<run>
-								<network>
-									<mode>custom</mode>
-									<name>my-network</name>
-									<alias>postgres</alias>
-								</network>
-								<wait>
-									<log>Waiting for connections</log>
-									<time>10000</time>
-								</wait>
-								</run>
-							</image>
+							 </image>
 						</images>
 					</configuration> 
 					<executions>
-					<execution>
-					<id>docker-build-image</id>
-					<phase>package</phase>
-					<goals>
-					<goal>build</goal>
-					</goals>
-					</execution>
-					<execution>
-					<id>docker-verify</id>
-					<phase>verify</phase>
-					<goals>
-					<goal>start</goal>
-					<goal>stop</goal>
-					</goals>
-					</execution>
-					</executions>
+
+						<execution>
+							<id>docker-build-image</id>
+								<phase>package</phase>
+							<goals>
+								<goal>build</goal>
+							</goals>
+						</execution>
+						  
+						<execution>
+							<id>docker-verify</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>start</goal>
+								<goal>stop</goal>
+							</goals>
+						</execution>
+					</executions> 
 					</plugin>
-				 
 				</plugins>
 			</build>
 		</profile>

@@ -7,15 +7,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.regex.Pattern;
- 
+    
 public class HotelDao { 
 
-	static final String MAX_ROOM_ID_SQL = "SELECT MAX(id) FROM rooms";
-	static final String INSERT_ROOM_SQL = "INSERT INTO rooms (id, room_number, room_description, room_amount) VALUES ( (SELECT MAX(id) FROM rooms) + 1, ?, ?, ?)";
+	static final String MAX_ROOM_ID_SQL = "SELECT MAX(room_number) FROM rooms";
+	static final String INSERT_ROOM_SQL = "INSERT INTO rooms ( room_number, room_description, room_amount) VALUES ( ?, ?, ?)";
 
-	private String dbUser = "dbmanager";
-	private String url = "jdbc:postgresql://db:5433/hoteldb";
-	private String dbPassword = "/Pass@098/";
+	private String hostName = System.getenv("HOST_NAME") != null ? System.getenv("HOST_NAME") : "localhost" ;
+	private String dbUser = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "postgres";
+	private String url = System.getenv("DB_URL") != null ? System.getenv("DB_URL") : "jdbc:postgresql://"+hostName+"5432/hoteldb";
+	private String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "/Pass@098/";
 
 	private int initialRoomNumber = 0;
 	private double amount = 300.00;
@@ -46,7 +47,7 @@ public class HotelDao {
 		roomDescription = roomDescription.trim();
 		return roomDescription;
 	}
-
+ 
 	public String publish(String description) throws SQLException {
 		String publishedRoom = null;
 
@@ -80,8 +81,8 @@ public class HotelDao {
 		} else {
 			return 0; // Assuming no records initially
 		}
-	}
-
+	}  
+   
 	private int insertRoom(Connection connection, String description) throws SQLException {
 		PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ROOM_SQL);
 		preparedStatement.setInt(1, roomNumber);

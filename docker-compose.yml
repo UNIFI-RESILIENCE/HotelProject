@@ -19,12 +19,17 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
-      
+       
   app:
     image:  hotelroom
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      DB_USER: dbmanager
+      DB_URL: jdbc:postgresql://db:5432/hoteldb
+      DB_PASSWORD: /Pass@098/
+      HOST_NAME: db
     networks: 
       - my-network  
     depends_on:
