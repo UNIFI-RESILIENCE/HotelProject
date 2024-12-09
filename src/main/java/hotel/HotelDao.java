@@ -13,10 +13,9 @@ public class HotelDao {
 	static final String MAX_ROOM_ID_SQL = "SELECT MAX(room_number) FROM rooms";
 	static final String INSERT_ROOM_SQL = "INSERT INTO rooms ( room_number, room_description, room_amount) VALUES ( ?, ?, ?)";
 
-	private String hostName = System.getenv("HOST_NAME") != null ? System.getenv("HOST_NAME") : "localhost" ;
-	private String dbUser = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "postgres";
-	private String url = System.getenv("DB_URL") != null ? System.getenv("DB_URL") : "jdbc:postgresql://"+hostName+"5432/hoteldb";
-	private String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "/Pass@098/";
+	private String dbUser = System.getenv("DB_USER") ;
+	private String url = System.getenv("DB_URL") ;
+	private String dbPassword = System.getenv("DB_PASSWORD") ;
 
 	private int initialRoomNumber = 0;
 	private double amount = 300.00;
@@ -47,7 +46,7 @@ public class HotelDao {
 		roomDescription = roomDescription.trim();
 		return roomDescription;
 	}
- 
+  
 	public String publish(String description) throws SQLException {
 		String publishedRoom = null;
 

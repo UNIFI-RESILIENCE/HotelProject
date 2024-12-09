@@ -34,6 +34,13 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
+            
+            <dependency>
+				<!-- required to see Mongo Java Driver logs -->
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>1.2.3</version>
+			</dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -265,6 +272,73 @@
 			</build>
 		</profile>
 		
+
+
+
+
+
+		<profile> 
+			<id>docker-compose</id>
+			<build>
+				<plugins>
+				<plugin>
+					<groupId>io.fabric8</groupId>
+					<artifactId>docker-maven-plugin</artifactId>
+					<version>0.45.1</version>
+					<extensions>true</extensions>
+					<configuration>
+						<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
+						<wait>
+						    <time>120000</time> <!-- Wait for 2 minutes -->
+						</wait>
+						<images>
+							<image>
+								<alias>app</alias>			
+							  <external> 
+							     <type>compose</type> 
+							     <basedir>${project.basedir}</basedir> 
+							     <composeFile>docker-compose.yml</composeFile>
+							  </external>
+							  
+							<run>
+							
+							<cmd>ls</cmd>
+							<entryPoint>java -jar /app/app.jar hotel.Main</entryPoint>
+							 </run>
+							</image>
+							  
+						</images>
+					</configuration>
+					<executions>
+
+						<execution>
+							<id>docker-build-image</id>
+								<phase>package</phase>
+							<goals>
+								<goal>build</goal>
+							</goals>
+						</execution>
+						  
+						<execution>
+							<id>docker-verify</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>start</goal>
+								<goal>stop</goal>
+							</goals>
+							
+						</execution>
+					</executions> 
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+
+
+
+
+		
 		<profile> 
 			<id>docker</id>
 			<build>
@@ -364,6 +438,7 @@
 									<cmd>java -jar /app/app.jar hotel.Main</cmd>
 								</run>
 							 </image>
+							  
 						</images>
 					</configuration> 
 					<executions>
