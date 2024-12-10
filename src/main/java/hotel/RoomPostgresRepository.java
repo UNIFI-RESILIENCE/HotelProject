@@ -24,7 +24,7 @@ public class RoomPostgresRepository implements RoomRepository {
 	
 	public RoomPostgresRepository(String url, String dbUser, String dbpassword) {
 		try {
-			connection = DriverManager.getConnection(url, dbUser, dbPassword);
+			connection = DriverManager.getConnection(url, dbUser, dbpassword);
 		} catch (SQLException e) {			
 			e.printStackTrace();
 		}		
