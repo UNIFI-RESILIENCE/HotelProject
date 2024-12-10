@@ -32,53 +32,62 @@ public class HotelRoomView extends JFrame implements RoomView{
 	 * Create the frame.
 	 */
 	public HotelRoomView() {
+		setName("Room_Manager");
 
 		setTitle("Room Manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 636);
 		contentPane = new JPanel();
+		contentPane.setName("contentPane");
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JLabel lbRoomNumber = new JLabel("Room Number");
+		lbRoomNumber.setName("lbRoomNumber");
 		lbRoomNumber.setBounds(31, 88, 149, 29);
 		contentPane.add(lbRoomNumber);
 
 		txtRoomNumber = new JTextField();
+		txtRoomNumber.setName("txtRoomNumber");
 		txtRoomNumber.setBounds(31, 120, 149, 45);
 		contentPane.add(txtRoomNumber);
 		txtRoomNumber.setColumns(10);
 
 		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setName("scrollPane_1");
 		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane_1.setBounds(214, 58, 441, 158);
 		contentPane.add(scrollPane_1);
 
 		txtRoomDescription = new JTextArea();
+		txtRoomDescription.setName("txtRoomDescription");
 		scrollPane_1.setViewportView(txtRoomDescription);
 		txtRoomDescription.setRows(1000);
 		txtRoomDescription.setWrapStyleWord(true);
 		txtRoomDescription.setLineWrap(true);
 
 		lblDescription = new JLabel("Description");
+		lblDescription.setName("lblDescription");
 		lblDescription.setBounds(214, 30, 94, 29);
 		contentPane.add(lblDescription);
 
-		JSeparator separator = new JSeparator();
-		separator.setBounds(31, 298, 624, 10);
-		contentPane.add(separator);
 
 		scrollPane = new JScrollPane();
+		scrollPane.setName("scrollPane");
 		scrollPane.setBounds(31, 322, 624, 219);
 		contentPane.add(scrollPane);
 
 		JTextPane lbRoomDetails = new JTextPane();
+		lbRoomDetails.setName("lbRoomDetails");
 		lbRoomDetails.setEditable(false);
 		scrollPane.setViewportView(lbRoomDetails);
+		
 
 		JButton btnPublish = new JButton("Publish Room");
+		btnPublish.setEnabled(false);
+		btnPublish.setName("btnPublish");
 		btnPublish.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Integer roomNumber = Integer.parseInt(txtRoomNumber.getText());
@@ -93,12 +102,14 @@ public class HotelRoomView extends JFrame implements RoomView{
 		contentPane.add(btnPublish);
 		
 		JLabel lbDisplayStatus = new JLabel("");
+		lbDisplayStatus.setName("lbDisplayStatus");
 		lbDisplayStatus.setForeground(new Color(192, 28, 40));
 		lbDisplayStatus.setBackground(new Color(238, 238, 238));
 		lbDisplayStatus.setBounds(31, 595, 624, 29);
 		contentPane.add(lbDisplayStatus);
 		
 		JButton btnDelete = new JButton("Delete Room");
+		btnDelete.setName("btnDelete");
 		btnDelete.setEnabled(false);
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
