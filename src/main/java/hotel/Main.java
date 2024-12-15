@@ -10,6 +10,9 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+		HotelRoomView roomGUI = new HotelRoomView();
+		roomGUI.setVisible(true);
+		
 		LOGGER.info("App started");
  
 		//HotelDao room = new HotelDao();
@@ -20,15 +23,11 @@ public class Main {
 		// 	// TODO Auto-generated catch block
 		// 	e.printStackTrace();
 		// }
-
-		 
-		RoomPostgresRepository repository = new RoomPostgresRepository();
 		
+		RoomPostgresRepository repository = new RoomPostgresRepository();
 		// Save a room
 		Room room = new Room("200", "John Doe");
-		Room room2 = new Room("100", "John Doe");
 		repository.save(room);
-		repository.save(room2);
 		
 		// Retrieve a room
 		Room retrievedRoom = repository.findById("1");
@@ -41,6 +40,9 @@ public class Main {
 		// Delete a room
 		repository.delete("1");
 		LOGGER.info("App terminated");
+		
+		
+		 
 	}
 
 }
