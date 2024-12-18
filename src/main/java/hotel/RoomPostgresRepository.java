@@ -22,6 +22,7 @@ public class RoomPostgresRepository implements RoomRepository {
 		}		
 	}
 	
+	//for test
 	public RoomPostgresRepository(String url, String dbUser, String dbpassword) {
 		try {
 			connection = DriverManager.getConnection(url, dbUser, dbpassword);
@@ -42,6 +43,7 @@ public class RoomPostgresRepository implements RoomRepository {
 	                    resultSet.getString("room_description")
 	                ));
 	            }
+	            System.err.println(resultSet);
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }

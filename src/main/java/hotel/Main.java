@@ -2,6 +2,8 @@ package hotel;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.awt.EventQueue;
 import java.util.List;
 
 public class Main {
@@ -10,35 +12,21 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		HotelRoomView roomGUI = new HotelRoomView();
-		roomGUI.setVisible(true);
-		
 		LOGGER.info("App started");
- 
-		//HotelDao room = new HotelDao();
+		EventQueue.invokeLater(() -> {
+			try {
+		RoomPostgresRepository roomRepository = new RoomPostgresRepository();
+		HotelRoomView hotelRoomView =  new HotelRoomView();
+		RoomController roomController = new RoomController(hotelRoomView, roomRepository);
+		hotelRoomView.setRoomController(roomController);
+		hotelRoomView.setVisible(true);
+		roomController.allRooms();
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			}
+		});
 
-		// try {
-		// 	room.publish("saved from main");
-		// } catch (SQLException e) {
-		// 	// TODO Auto-generated catch block
-		// 	e.printStackTrace();
-		// }
-		
-		RoomPostgresRepository repository = new RoomPostgresRepository();
-		// Save a room
-		Room room = new Room("200", "John Doe");
-		repository.save(room);
-		
-		// Retrieve a room
-		Room retrievedRoom = repository.findById("1");
-		System.out.println(retrievedRoom);
-		
-		// Get all students
-		List<Room> allRooms = repository.findAll();
-		System.out.println(allRooms);
-		
-		// Delete a room
-		repository.delete("1");
 		LOGGER.info("App terminated");
 		
 		

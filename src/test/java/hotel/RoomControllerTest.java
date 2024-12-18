@@ -1,12 +1,9 @@
 package hotel;
 
 import static org.mockito.Mockito.when;
-
 import static org.mockito.Mockito.*;
 import static java.util.Arrays.asList;
-
 import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +29,6 @@ public class RoomControllerTest {
 	public void setup() {
 		closeable = MockitoAnnotations.openMocks(this);
 	}
-	
 	
 	@After
 	public void releaseMocks() throws Exception {
@@ -83,13 +79,13 @@ public class RoomControllerTest {
 	}
 
 	@Test
-	public void testdeleteRoomWhenStudentDoesNotExist() {
-		Room student = new Room("1", "test");
+	public void testdeleteRoomWhenRoomDoesNotExist() {
+		Room room = new Room("1", "test");
 		when(roomRepository.findById("1")).
 			thenReturn(null);
-		roomController.deleteRoom(student);
+		roomController.deleteRoom(room);
 		verify(roomView)
-			.showError("Room not found 1", student);
+			.showError("Room not found 1", room);
 		verifyNoMoreInteractions(ignoreStubs(roomRepository));
 	}
 }

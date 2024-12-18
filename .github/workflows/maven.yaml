@@ -4,7 +4,7 @@ on:
   push: 
     branches: 
       - main
-      - feat_docker
+      - feat_ui
   pull_request:
 
 
@@ -59,4 +59,7 @@ jobs:
       with:
         name: jacoco-report-jdk-${{ matrix.java }}
         path: '**/target/site'
+    - name: Build with Maven
+      run: xvfb-run mvn verify
+      working-directory: hotel
 

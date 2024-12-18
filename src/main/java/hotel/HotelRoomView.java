@@ -1,10 +1,8 @@
 package hotel;
 
 import java.util.List;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-//import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,9 +12,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import java.awt.Color;
 import javax.swing.JList;
 import java.awt.event.KeyAdapter;
@@ -40,25 +35,27 @@ public class HotelRoomView extends JFrame implements RoomView{
 	private JLabel lbDisplayStatus;
 
 	private DefaultListModel<Room> listRoomsModel;
+	
 	DefaultListModel<Room> getListRoomModel() {
 		return listRoomsModel;
 	}
 	
 	public void setRoomController(RoomController roomController) {
+		
 		this.roomController = roomController;
 	}
+
 	/**
 	 * Create the frame.
 	 */
 	public HotelRoomView() {
-		
 		setTitle("Room Manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		setBounds(100, 100, 692, 636);
 		contentPane = new JPanel();
 		//contentPane.setName("contentPane");
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
@@ -102,17 +99,20 @@ public class HotelRoomView extends JFrame implements RoomView{
 		lblDescription.setBounds(214, 30, 94, 29);
 		contentPane.add(lblDescription);
 
-
 		scrollPane = new JScrollPane();
 		scrollPane.setName("scrollPane");
 		scrollPane.setBounds(31, 322, 624, 219);
 		contentPane.add(scrollPane);
 		
-		
 		btnDelete = new JButton("Delete Room");
 		btnDelete.setName("btnDelete");
 		btnDelete.setEnabled(false);
 		btnDelete.setBounds(288, 553, 140, 27);
+		btnDelete.addActionListener(
+				e -> { 
+					
+					roomController.deleteRoom(lstDisplayRooms.getSelectedValue());
+				});
 		contentPane.add(btnDelete);
 		
 		listRoomsModel = new DefaultListModel<>();
@@ -127,50 +127,44 @@ public class HotelRoomView extends JFrame implements RoomView{
 		btnPublish = new JButton("Publish Room");
 		btnPublish.setEnabled(false);
 		btnPublish.setName("btnPublish");
+		btnPublish.addActionListener(e -> {
+			
+		    roomController.newRoom( new Room(txtRoomNumber.getText(), txtRoomDescription.getText()));
+		});
 		
-				//Integer roomNumber = Integer.parseInt(txtRoomNumber.getText());
-
-				//Double amount = Double.parseDouble(txtRoomAmount.getText());
-
-				//String roomDescription = txtRoomDescription.getText();
-
 		btnPublish.setBounds(31, 233, 624, 45);
 		contentPane.add(btnPublish);
-		
-		
+
+		//Integer roomNumber = Integer.parseInt(txtRoomNumber.getText());
+		//Double amount = Double.parseDouble(txtRoomAmount.getText());
+		//String roomDescription = txtRoomDescription.getText();
+
 		lbDisplayStatus = new JLabel("");
 		lbDisplayStatus.setName("lbDisplayStatus");
 		lbDisplayStatus.setForeground(new Color(192, 28, 40));
 		lbDisplayStatus.setBackground(new Color(238, 238, 238));
 		lbDisplayStatus.setBounds(31, 595, 624, 29);
-		contentPane.add(lbDisplayStatus);
-		
-	
+		contentPane.add(lbDisplayStatus);	
 	}
 
 	@Override
 	public void showAllRooms(List<Room> rooms) {
-		// TODO Auto-generated method stub
 		rooms.stream().forEach(listRoomsModel::addElement);
-		
 	}
-
+	
 	@Override
 	public void showError(String message, Room room) {
-		// TODO Auto-generated method stub
-		lbDisplayStatus.setText(message + ": " + room);
+	    lbDisplayStatus.setText(message + ": " + room);
 	}
 
 	@Override
 	public void roomAdded(Room room) {
-		// TODO Auto-generated method stub
-		listRoomsModel.addElement(room);
-		resetErrorLabel();
-	}
+	        listRoomsModel.addElement(room);
+	        resetErrorLabel();
+	   }
 
 	@Override
 	public void roomRemoved(Room room) {
-		// TODO Auto-generated method stub
 		listRoomsModel.removeElement(room);
 		resetErrorLabel();
 	}

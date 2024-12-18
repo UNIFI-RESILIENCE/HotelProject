@@ -3,6 +3,7 @@ package hotel;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 
@@ -15,12 +16,12 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JListFixture;
-import org.assertj.swing.fixture.JListItemFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 @RunWith(GUITestRunner.class)
@@ -37,15 +38,18 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase{
 	
 	@Override
 	protected void onSetUp() {
-		
+		closeable = MockitoAnnotations.openMocks(this);
+		Mockito.verifyNoMoreInteractions(roomController);
+//		RoomPostgresRepository roomRepository = new RoomPostgresRepository();
+//		RoomController roomController = new RoomController(hotelRoomView, roomRepository);
 		GuiActionRunner.execute(() -> {
-			closeable = MockitoAnnotations.openMocks(this);
 				hotelRoomView = new HotelRoomView();
 				hotelRoomView.setRoomController(roomController);
 				return hotelRoomView;
 			});
 			window = new FrameFixture(robot(), hotelRoomView);
 			window.show(); // shows the frame to test
+			System.err.println(hotelRoomView);
 	// to implement
 	}
 	
@@ -56,7 +60,6 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase{
 	
 	@Test @GUITest
 	public void testControlsInitialStates() {
-		
 		window.label(JLabelMatcher.withText("Room Number"));
 		window.textBox("txtRoomNumber").requireEnabled();
 		window.label(JLabelMatcher.withText("Description"));
@@ -70,7 +73,6 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase{
 			
 	}
 	
-	
 	@Test
 	public void testWhenIdAndRoomAreNonEmptyThenAddButtonShouldBeEnabled() {
 		window.textBox("txtRoomNumber").enterText("1");
@@ -78,7 +80,6 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase{
 		window.button(JButtonMatcher.withName("btnPublish")).requireEnabled();
 	}
 	
-
 	@Test
 	public void testWhenEitherIdOrNameAreBlankThenAddButtonShouldBeDisabled() {
 	    JTextComponentFixture txtRoomNumber = window.textBox("txtRoomNumber");
@@ -93,36 +94,29 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase{
 	    window.button(JButtonMatcher.withName("btnPublish")).requireDisabled();
 	}
 
-	
 	@Test
 	public void testDeleteButtonShouldBeEnabledOnlyWhenARoomIsSelected() {
+		Room room1 = new Room("50", "test");
 		GuiActionRunner.execute(() -> { 
-			hotelRoomView.getListRoomModel().addElement(new Room("50", "test"));
+			hotelRoomView.getListRoomModel().addElement(room1);
 			
 		});
 		JListFixture list = window.list("lstDisplayRooms");
 		list.selectItem(0);
 		JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete Room"));
-		/*
-		 * deleteButton.requireEnabled();
-		 * window.list("lstDisplayRooms").clearSelection();
-		 * deleteButton.requireDisabled();
-		 */
+		deleteButton.requireEnabled();
+		window.list("lstDisplayRooms").clearSelection();
+		deleteButton.requireDisabled();
 	}
 	
 	
 	@Test
-	public void testShowAllStudentsShouldAddStudentDescriptionsToTheList() {
-	    // Arrange: Create test students
+	public void testShowAllRoomsShouldAddRoomDescriptionsToTheList() {
 	    Room room1 = new Room("1", "test1");
 	    Room room2 = new Room("2", "test2");
-
-	    // Act: Call the showAllStudents method with test data
 	    GuiActionRunner.execute(() ->
 	        hotelRoomView.showAllRooms(Arrays.asList(room1, room2))
 	    );
-
-	    // Assert: Verify the list contains the expected student descriptions
 	    String[] listContents = window.list().contents();
 	    assertThat(listContents)
 	        .containsExactly(room1.toString(), room2.toString());
@@ -169,6 +163,48 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase{
 	}
 
 
+	@Test
+	public void testRoomAddedShouldAddTheRoomToTheListAndResetTheErrorLabel() {
+	    // Arrange: Create a test room
+	    Room room = new Room("101", "Test Room");
+
+	    // Act: Add the room to the list
+	    GuiActionRunner.execute(() ->
+	        hotelRoomView.roomAdded(new Room("101", "Test Room"))
+	    );
+
+	    // Assert: Verify the list contains the added room
+	    String[] listContents = window.list("lstDisplayRooms").contents();
+	    assertThat(listContents).containsExactly(room.toString());
+
+	    // Verify the error label is reset
+	    window.label("lbDisplayStatus").requireText(" ");
+	}
+
+	@Test
+	public void testAddButtonShouldDelegateToHotelRoomControllerNewRoom() {
+	    window.textBox("txtRoomNumber").enterText("101");
+	    window.textBox("txtRoomDescription").enterText("Test Room");
+	    window.button(JButtonMatcher.withText("Publish Room")).click();
+	    verify(roomController).newRoom(new Room("101", "Test Room"));
+	}
+
+	@Test
+	public void testDeleteButtonShouldDelegateToHotelRoomControllerDeleteRoom() {
+	    // Arrange: Create and populate room list
+	    Room room1 = new Room("101", "Test Room 1");
+	    Room room2 = new Room("102", "Test Room 2");
+	    GuiActionRunner.execute(
+			() -> {
+	        DefaultListModel<Room> listRoomsModel = hotelRoomView.getListRoomModel();
+	        listRoomsModel.addElement(room1);
+	        listRoomsModel.addElement(room2);
+	    });
+	    window.list("lstDisplayRooms").selectItem(1);
+	    assertThat(window.list("lstDisplayRooms").selection()).containsExactly(room2.toString());
+	    window.button(JButtonMatcher.withText("Delete Room")).click();
+	    verify(roomController).deleteRoom(room2);
+	}
 
 
 }
