@@ -11,13 +11,17 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
+import java.awt.EventQueue;
+
 import javax.swing.JList;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class HotelRoomView extends JFrame implements RoomView{
+
+public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTestable{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -36,6 +40,18 @@ public class HotelRoomView extends JFrame implements RoomView{
 
 	private DefaultListModel<Room> listRoomsModel;
 	
+	/*
+	 * public static void main(String[] args) {
+	 * 
+	 * 
+	 * EventQueue.invokeLater(() -> { try { HotelRoomView frame = new
+	 * HotelRoomView(); frame.setVisible(true);
+	 * 
+	 * } catch (Exception e) { e.printStackTrace(); } });
+	 * 
+	 * }
+	 */
+	
 	DefaultListModel<Room> getListRoomModel() {
 		return listRoomsModel;
 	}
@@ -45,6 +61,8 @@ public class HotelRoomView extends JFrame implements RoomView{
 		this.roomController = roomController;
 	}
 
+
+    
 	/**
 	 * Create the frame.
 	 */
@@ -110,7 +128,6 @@ public class HotelRoomView extends JFrame implements RoomView{
 		btnDelete.setBounds(288, 553, 140, 27);
 		btnDelete.addActionListener(
 				e -> { 
-					
 					roomController.deleteRoom(lstDisplayRooms.getSelectedValue());
 				});
 		contentPane.add(btnDelete);
@@ -128,9 +145,9 @@ public class HotelRoomView extends JFrame implements RoomView{
 		btnPublish.setEnabled(false);
 		btnPublish.setName("btnPublish");
 		btnPublish.addActionListener(e -> {
-			
-		    roomController.newRoom( new Room(txtRoomNumber.getText(), txtRoomDescription.getText()));
-		});
+			roomController.newRoom( new Room(txtRoomNumber.getText(), txtRoomDescription.getText()));
+		}
+		);
 		
 		btnPublish.setBounds(31, 233, 624, 45);
 		contentPane.add(btnPublish);
@@ -154,13 +171,17 @@ public class HotelRoomView extends JFrame implements RoomView{
 	
 	@Override
 	public void showError(String message, Room room) {
-	    lbDisplayStatus.setText(message + ": " + room);
+			SwingUtilities.invokeLater(() ->
+		    lbDisplayStatus.setText(message + ": " + room)
+		);
 	}
 
 	@Override
 	public void roomAdded(Room room) {
+		SwingUtilities.invokeLater(() -> {
 	        listRoomsModel.addElement(room);
 	        resetErrorLabel();
+		});
 	   }
 
 	@Override
@@ -172,4 +193,20 @@ public class HotelRoomView extends JFrame implements RoomView{
 	private void resetErrorLabel() {
 		lbDisplayStatus.setText(" ");
 		}
+	
+	@Override
+    public JList<Room> getLstDisplayRooms() {
+       return lstDisplayRooms;
+   }
+   
+	@Override
+   public JButton getBtnDelete() {
+   	return btnDelete;
+   }
+   
+	@Override
+   public JButton getBtnPublish() {
+   	return btnPublish;
+   }
+	
 }

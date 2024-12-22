@@ -6,7 +6,7 @@
     <groupId>com.hotels.app</groupId>
     <artifactId>rooms</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-
+ 
     <name>rooms</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>

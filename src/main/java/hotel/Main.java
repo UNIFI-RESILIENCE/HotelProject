@@ -28,9 +28,7 @@ public class Main {
 		});
 
 		LOGGER.info("App terminated");
-		
-		
-		 
+			 
 	}
 
 }
