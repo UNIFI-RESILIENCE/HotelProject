@@ -19,7 +19,7 @@ public class HotelRoomApp implements Callable<Void>{
 	
 	@Option (names = {"--dbHost"} , description = "Database Host Url" )
 	private String dbHost = "";
-	
+	 
 	@Option(names = {"--dbPassword" }, description = "Database Password" )
 	private String dbPassword = "";
 	

@@ -22,7 +22,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         
-        -->
+        --> 
     </properties>
 
     <dependencyManagement>
@@ -206,7 +206,7 @@
 		</plugin>
 		
 		
-		<!--plugin>
+		<plugin>
 			<groupId>org.codehaus.mojo</groupId>
 			<artifactId>build-helper-maven-plugin</artifactId>
 			<version>3.0.0</version>
@@ -219,12 +219,13 @@
 				</goals>
 				<configuration>
 					<sources>
-					<source>src/it/java/</source>
-					</sources>
+					<source>src/it/java</source>
+					<source>src/e2e/java</source> 
+					</sources> 
 				</configuration>
 				</execution>
 			</executions>
-		</plugin-->
+		</plugin>
 		
 		<plugin>
 		<groupId>org.apache.maven.plugins</groupId>
@@ -322,15 +323,31 @@
                         <goal>integration-test</goal>
                         <goal>verify</goal>
                     </goals>
+                    <configuration>
+		                <!-- Specify the directory for integration tests -->
+		                <testSourceDirectory>${basedir}/src/it/java/hotel</testSourceDirectory>
+		                <includes>
+		                    <include>**/*IT.java</include>
+		                </includes>
+		            </configuration>
                 </execution>
+                <execution>
+					<id>e2e-tests</id>
+					<goals>
+						<goal>integration-test</goal>
+						<goal>verify</goal>
+					</goals>
+					<configuration>
+						<excludes>
+							<exclude>**/*IT.java</exclude>
+						</excludes>
+						<includes>
+							<include>**/*E2E.java</include>
+						</includes>
+					</configuration>
+				</execution> 
             </executions>
-            <configuration>
-                <!-- Specify the directory for integration tests -->
-                <testSourceDirectory>${basedir}/src/it/java/hotel</testSourceDirectory>
-                <includes>
-                    <include>**/*IT.java</include>
-                </includes>
-            </configuration>
+            
         </plugin>
         </plugins>
     </build>
