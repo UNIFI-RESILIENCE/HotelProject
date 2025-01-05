@@ -279,13 +279,7 @@
                         <goal>integration-test</goal>
                         <goal>verify</goal>
                     </goals>
-                    <configuration>
-						<excludes>
-							<exclude>**/Main.java</exclude>
-							<exclude>**/HotelRoomApp.java</exclude>
-						</excludes>
-						
-					</configuration>
+                
 <!--                    <configuration>-->
 <!--		                 Specify the directory for integration tests -->
 <!--		                <testSourceDirectory>${basedir}/src/it/java/hotel</testSourceDirectory>-->
