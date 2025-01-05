@@ -14,6 +14,7 @@ import static org.assertj.swing.launcher.ApplicationLauncher.*;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.GenericTypeMatcher;
+import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.FrameFixture;
@@ -39,7 +40,11 @@ public class HotelRoomE2E extends AssertJSwingJUnitTestCase{
 			.withPassword("testpass");
 
 	
-	
+	private static final String EXISTING_ROOM_1 = "1";
+	private static final String EXISTING_ROOM_1_DESCRIPTION = "test room 1 added";
+
+	private static final String EXISTING_ROOM_2 = "2";
+	private static final String EXISTING_ROOM_2_DESCRIPTION = "test room 2 added";
 
  
 	@Override
@@ -66,8 +71,8 @@ public class HotelRoomE2E extends AssertJSwingJUnitTestCase{
 			statement.execute("DROP TABLE IF EXISTS rooms");
 			statement.execute(
 					"CREATE TABLE rooms (room_number VARCHAR(50) PRIMARY KEY, room_description VARCHAR(1000))");
-			addTestRoomToDatabase("1", "test room 1 added");
-			addTestRoomToDatabase("2", "test room 2 added");
+			addTestRoomToDatabase(EXISTING_ROOM_1, EXISTING_ROOM_1_DESCRIPTION);
+			addTestRoomToDatabase(EXISTING_ROOM_2, EXISTING_ROOM_2_DESCRIPTION);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,6 +110,34 @@ public class HotelRoomE2E extends AssertJSwingJUnitTestCase{
 	.anySatisfy(e -> assertThat(e).contains("2", "test room 2 added"));
 	}
 	
+	
+	@Test
+	@GUITest
+	public void testAddRoomSuccess() {
+	    // Simulate entering data for adding a new room
+	    window.textBox("txtRoomNumber").enterText("101");
+	    window.textBox("txtRoomDescription").enterText("Test room 101 description");
+	    window.button(JButtonMatcher.withText("Publish Room")).click();
+
+	    // Assert that the new room was successfully added to the list
+	    assertThat(window.list().contents())
+	        .anySatisfy(entry -> assertThat(entry).contains("101", "Test room 101 description"));
+	}
+
+	@Test
+	@GUITest
+	public void testAddRoomError() {
+	    // Simulate trying to add a room with duplicate room number
+	    window.textBox("txtRoomNumber").enterText(EXISTING_ROOM_1);
+	    window.textBox("txtRoomDescription").enterText(EXISTING_ROOM_1_DESCRIPTION);
+	    window.button(JButtonMatcher.withText("Publish Room")).click();
+
+	    // Assert that an appropriate error message is shown
+	    assertThat(window.label("lbDisplayStatus").text())
+	        .contains(EXISTING_ROOM_1, EXISTING_ROOM_1_DESCRIPTION);
+	}
+
+	
 	private void addTestRoomToDatabase(String id, String description) {
 		String sql = "INSERT INTO rooms ( room_number, room_description) VALUES ( ?, ?)";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -116,5 +149,6 @@ public class HotelRoomE2E extends AssertJSwingJUnitTestCase{
 			e.printStackTrace();
 		}
 	}
+	
 }
  
