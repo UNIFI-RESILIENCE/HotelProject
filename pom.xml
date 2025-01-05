@@ -22,7 +22,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         
-        --> 
+        -->  
     </properties>
 
     <dependencyManagement>
@@ -35,12 +35,7 @@
                 <type>pom</type>
             </dependency>
             
-            <dependency>
-				<!-- required to see Mongo Java Driver logs -->
-				<groupId>ch.qos.logback</groupId>
-				<artifactId>logback-classic</artifactId>
-				<version>1.2.3</version>
-			</dependency>
+           
         </dependencies>
     </dependencyManagement>
 
@@ -116,43 +111,6 @@
         <pluginManagement>
             <plugins>
                 <!-- Jacoco plugin for code coverage -->
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.12</version>
-                    <executions>
-                        <execution>
-                            <id>jacoco-check</id>
-                            <goals>
-                                <goal>check</goal>
-                                <!-- binds by default to the phase "initialize" -->
-								<goal>prepare-agent</goal>
-								<!-- binds by default to the phase "verify" -->
-								<goal>report</goal>
-                            </goals>
-                            <configuration>
-                                <rules>
-                                    <rule>
-                                        <element>PACKAGE</element>
-                                        <limits>
-                                            <limit>
-                                                <counter>LINE</counter>
-                                                <value>COVEREDRATIO</value>
-                                                <minimum>0.50</minimum>
-                                            </limit>
-                                        </limits>
-                                    </rule>
-                                </rules>
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <excludes>
-                            <exclude>hotel.Main*</exclude>
-                        </excludes>
-                    </configuration>
-                </plugin>
-
 
 
                 <!-- Pitest plugin for mutation testing -->
@@ -186,8 +144,7 @@
 					<artifactId>maven-site-plugin</artifactId>
 					<version>3.9.1</version>
 				</plugin>
-
-
+				
 		<!--   coveralls-->
 		
 		<plugin>
@@ -204,42 +161,6 @@
 			</dependency>
 			</dependencies>
 		</plugin>
-		
-		
-		<plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>build-helper-maven-plugin</artifactId>
-			<version>3.0.0</version>
-			<executions>
-				<execution>
-				<id>add-test-source</id>
-				<phase>generate-test-sources</phase>
-				<goals>
-					<goal>add-test-source</goal>
-				</goals>
-				<configuration>
-					<sources>
-					<source>src/it/java</source>
-					<source>src/e2e/java</source> 
-					</sources> 
-				</configuration>
-				</execution>
-			</executions>
-		</plugin>
-		
-		<plugin>
-		<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-failsafe-plugin</artifactId>
-		<version>2.22.1</version>
-		<executions>
-			<execution>
-			<goals>
-				<goal>integration-test</goal>
-				<goal>verify</goal>
-			</goals>
-			</execution>
-		</executions>
-		</plugin>
 
             </plugins>
         </pluginManagement>
@@ -254,7 +175,6 @@
                     <target>17</target>
                 </configuration>
             </plugin>
-			
 			 
             <!-- Maven Jar Plugin for packaging -->
             <plugin>
@@ -313,23 +233,66 @@
             
             -->
             
+            		
+		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>build-helper-maven-plugin</artifactId>
+			<version>3.0.0</version>
+			<executions>
+				<execution>
+				<id>add-test-source</id>
+				<phase>generate-test-sources</phase>
+				<goals>
+					<goal>add-test-source</goal>
+				</goals>
+				<configuration>
+					<sources>
+					<source>src/it/java</source>
+					<source>src/e2e/java</source> 
+					</sources> 
+				</configuration>
+				</execution>
+			</executions>
+		</plugin>
+		
+<!--		<plugin>-->
+<!--		<groupId>org.apache.maven.plugins</groupId>-->
+<!--		<artifactId>maven-failsafe-plugin</artifactId>-->
+<!--		<version>2.22.1</version>-->
+<!--		<executions>-->
+<!--			<execution>-->
+<!--			<goals>-->
+<!--				<goal>integration-test</goal>-->
+<!--				<goal>verify</goal>-->
+<!--			</goals>-->
+<!--			</execution>-->
+<!--		</executions>-->
+<!--		</plugin>-->
+            
             <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
             <executions>
                 <execution>
-                    <id>integration-test</id>
+                    <id>default-it</id>
                     <goals>
                         <goal>integration-test</goal>
                         <goal>verify</goal>
                     </goals>
                     <configuration>
-		                <!-- Specify the directory for integration tests -->
-		                <testSourceDirectory>${basedir}/src/it/java/hotel</testSourceDirectory>
-		                <includes>
-		                    <include>**/*IT.java</include>
-		                </includes>
-		            </configuration>
+						<excludes>
+							<exclude>**/Main.java</exclude>
+							<exclude>**/HotelRoomApp.java</exclude>
+						</excludes>
+						
+					</configuration>
+<!--                    <configuration>-->
+<!--		                 Specify the directory for integration tests -->
+<!--		                <testSourceDirectory>${basedir}/src/it/java/hotel</testSourceDirectory>-->
+<!--		                <includes>-->
+<!--		                    <include>**/*IT.java</include>-->
+<!--		                </includes>-->
+<!--		            </configuration>-->
                 </execution>
                 <execution>
 					<id>e2e-tests</id>
@@ -359,20 +322,58 @@
 			<id>jacoco</id>
 				<build>
 					<plugins>
-						<plugin>
-							<!-- configured in pluginManagement -->
-							<groupId>org.jacoco</groupId>
-							<artifactId>jacoco-maven-plugin</artifactId>
-						</plugin>
+					
+						
+						
+				<plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.12</version>
+                    <executions>
+                        <execution>
+                            <id>jacoco-check</id>
+                            <goals>
+                                <goal>check</goal>
+                                 
+								<goal>prepare-agent</goal>
+								
+								<goal>report</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <rule>
+                                        <element>PACKAGE</element>
+                                        <limits>
+                                            <limit>
+                                                <counter>LINE</counter>
+                                                <value>COVEREDRATIO</value>
+                                                <minimum>0.50</minimum>
+                                            </limit>
+                                        </limits>
+                                    </rule>
+                                </rules>
+                            </configuration>
+                        </execution>
+                        <execution>
+						            <id>jacoco-report</id>
+						            <goals>
+						                <goal>report</goal>
+						            </goals>
+						             <configuration>
+				                        <excludes>
+				                            <exclude>hotel.Main*</exclude>
+				                            <exclude>**/Main.java</exclude>
+											<exclude>**/HotelRoomApp.java</exclude>
+				                        </excludes>
+				                    </configuration>
+						        </execution>
+                    </executions>
+                   
+                </plugin>
 					</plugins>
 			</build>
 		</profile>
 		
-
-
-
-
-
 		<profile> 
 			<id>docker-compose</id>
 			<build>
@@ -430,11 +431,6 @@
 			</build>
 		</profile>
 
-
-
-
-
-		
 		<profile> 
 			<id>docker</id>
 			<build>

@@ -15,13 +15,13 @@ import picocli.CommandLine.Option;
 public class HotelRoomApp implements Callable<Void>{
 	
 	@Option(names = {"--dbName"} , description = "Database name")
-	private String dbName = "";
+	private String dbName = System.getenv("DB_USER");
 	
 	@Option (names = {"--dbHost"} , description = "Database Host Url" )
-	private String dbHost = "";
+	private String dbHost = System.getenv("DB_URL");
 	 
 	@Option(names = {"--dbPassword" }, description = "Database Password" )
-	private String dbPassword = "";
+	private String dbPassword = System.getenv("DB_PASSWORD");
 	
 	RoomPostgresRepository roomRepository;
 	
@@ -35,8 +35,7 @@ public class HotelRoomApp implements Callable<Void>{
 		EventQueue.invokeLater(() -> {
 		
 			try {
-				
-				
+
 //				if (args.length > 0 ) {
 //					System.err.println("using argument for db");
 //					String dbName = args[0];

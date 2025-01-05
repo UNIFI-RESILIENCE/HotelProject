@@ -21,9 +21,9 @@ public class RoomPostgresRepositoryTestContainersIT {
             .withDatabaseName("testdb")
             .withUsername("testuser")
             .withPassword("testpass");
-
+ 
     private Connection connection;
-    private RoomRepository roomRepository;
+    private RoomPostgresRepository roomRepository;
 
     @Before
     public void setUp() throws Exception {

@@ -4,7 +4,7 @@ import java.awt.EventQueue;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
- 
+
 public class Main {
 
 	private static final Logger LOGGER = LogManager.getLogger(Main.class);
@@ -13,17 +13,17 @@ public class Main {
 
 		LOGGER.info("App started");
 		EventQueue.invokeLater(() -> {
-		
+
 			try {
-				
+
 				RoomPostgresRepository roomRepository;
-				if (args.length > 0 ) {
+				if (args.length > 0) {
 					System.err.println("using argument for db");
 					String dbName = args[0];
 					String dbHost = args[1];
 					String dbPassword = args[2];
-					roomRepository = new RoomPostgresRepository(dbHost,dbName, dbPassword);
-				}else {
+					roomRepository = new RoomPostgresRepository(dbHost, dbName, dbPassword);
+				} else {
 					roomRepository = new RoomPostgresRepository();
 				}
 				HotelRoomView hotelRoomView = new HotelRoomView();
