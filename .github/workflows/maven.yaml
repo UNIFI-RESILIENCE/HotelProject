@@ -4,7 +4,7 @@ on:
   push: 
     branches: 
       - main
-      - feat_ui
+      - feat_e2e
   pull_request:
 
 
