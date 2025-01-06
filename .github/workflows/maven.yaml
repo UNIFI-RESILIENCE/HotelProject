@@ -36,18 +36,14 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2-
 
-      - name: Generate JUnit Report and sonarcloud
+      - name: Generate JUnit Report
         run: >
           xvfb-run mvn -f ./pom.xml
-          clean verify -Pjacoco ${{ matrix.additional-maven-args }} sonar:sonar
-		  -Dsonar.organization=lorenzobettini-github
-		  -Dsonar.host.url=https://sonarcloud.io
+          clean verify -Pjacoco ${{ matrix.additional-maven-args }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-		  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-		  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ always() }}
-
+#
 #      - name: Build with Maven ${{ matrix.java }}
 #        run: xvfb-run mvn -f ./pom.xml clean verify
 
@@ -63,12 +59,12 @@ jobs:
         with:
           java-version: 11
 
-#      - name: Build with Maven and SonarCloud
-#        run: >
-#          xvfb-run mvn -f ./pom.xml clean verify -Pjacoco sonar:sonar
-#          -Dsonar.organization=lorenzobettini-github
-#          -Dsonar.host.url=https://sonarcloud.io
-#        working-directory: hotel
-#        env: 
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: SonarCloud and Build with Maven
+        run: >
+          xvfb-run mvn verify -Pjacoco sonar:sonar
+          -Dsonar.organization=lorenzobettini-github
+          -Dsonar.host.url=https://sonarcloud.io
+        working-directory: hotel
+        env: 
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
