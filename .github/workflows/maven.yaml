@@ -38,14 +38,14 @@ jobs:
 
       - name: Generate JUnit Report
         run: >
-          mvn -f ./pom.xml
+          xvfb-run mvn -f ./pom.xml
           clean verify -Pjacoco ${{ matrix.additional-maven-args }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         if: ${{ always() }}
 
       - name: Build with Maven ${{ matrix.java }}
-        run: mvn -f ./pom.xml clean verify
+        run: xvfb-run mvn -f ./pom.xml clean verify
 
       - name: Archive JUnit Report
         uses: actions/upload-artifact@v4
