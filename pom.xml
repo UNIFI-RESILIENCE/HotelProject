@@ -166,6 +166,17 @@
         </pluginManagement>
 
         <plugins>
+        
+             <plugin>
+	            <groupId>org.sonarsource.scanner.maven</groupId>
+	            <artifactId>sonar-maven-plugin</artifactId>
+	            <version>4.0.0.4121</version>
+	            <configuration>
+	                <sonar.projectKey>com.hotels.app:rooms</sonar.projectKey>
+	                <sonar.projectName>Hotel Rooms App</sonar.projectName>
+	                <sonar.branch.name>main</sonar.branch.name>
+	            </configuration>
+        	</plugin>
             <!-- Compiler plugin for Java version -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
