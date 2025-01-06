@@ -68,19 +68,9 @@ jobs:
           xvfb-run mvn -f ./pom.xml verify -Pjacoco ${{ matrix.additional-maven-args }} sonar:sonar
           -Dsonar.organization=unifi-resilience
           -Dsonar.host.url=https://sonarcloud.io
-#		  -Dsonar.projectKey=com.hotels.app:rooms
-#		  -Dsonar.projectName=rooms
-#		  -Dsonar.branch.name=main
 #        working-directory: hotel
         env: 
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 		  COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 		if: ${{ always() }}
-        
-	  - name: Archive JUnit Report
-	    uses: actions/upload-artifact@v4
-	    if: ${{ always() }}
-	    with:
-	      name: jacoco-report-jdk-${{ matrix.java }}
-	      path: '**/target/site'
