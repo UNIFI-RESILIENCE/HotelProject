@@ -12,21 +12,35 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 public class RoomPostgresRepositoryTest {
 
-	private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/testdb"; // Adjust the URL
-	private static final String USER = "postgres"; // Replace with your username
-	private static final String PASSWORD = "/Pass@098/"; // Replace with your password
+//	private static final String jdbcUrl = "jdbc:postgresql://localhost:5432/testdb"; // Adjust the URL
+//	private static final String username = "postgres"; // Replace with your username
+//	private static final String password = "/Pass@098/"; // Replace with your password
 
 	private Connection connection;
 	private RoomPostgresRepository roomRepository;
+	
+	@SuppressWarnings("resource")
+	public static final PostgreSQLContainer<?> postgres =
+	        new PostgreSQLContainer<>("postgres:16-alpine")
+	            .withDatabaseName("testdb")
+	            .withUsername("testuser")
+	            .withPassword("testpass");
 
 	@Before
 	public void setup() throws Exception {
+		
+		postgres.start();
+		
+        String jdbcUrl = postgres.getJdbcUrl();
+        String username = postgres.getUsername();
+        String password = postgres.getPassword();
 		// Connect to the PostgreSQL database
-		connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
-		roomRepository = new RoomPostgresRepository(JDBC_URL, USER, PASSWORD);
+		connection = DriverManager.getConnection(jdbcUrl, username, password);
+		roomRepository = new RoomPostgresRepository(jdbcUrl, username, password);
 
 		// Clean up and prepare the schema
 		try (Statement statement = connection.createStatement()) {
