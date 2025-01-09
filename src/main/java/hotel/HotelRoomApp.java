@@ -3,12 +3,17 @@ package hotel;
 import java.awt.EventQueue;
 import java.util.concurrent.Callable;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 @Command(mixinStandardHelpOptions = true)
 public class HotelRoomApp implements Callable<Void> {
+	
+	private static final Logger LOGGER = LogManager.getLogger(HotelRoomApp.class);
 
 	@Option(names = { "--dbName" }, description = "Database name")
 	private String dbName = System.getenv("DB_USER");
@@ -27,6 +32,8 @@ public class HotelRoomApp implements Callable<Void> {
 
 	@Override
 	public Void call() throws Exception {
+		
+		
 
 		EventQueue.invokeLater(() -> {
 
@@ -41,6 +48,7 @@ public class HotelRoomApp implements Callable<Void> {
 
 			} catch (Exception e) {
 				
+				LOGGER.info(e);
 			}
 		});
 		return null;
