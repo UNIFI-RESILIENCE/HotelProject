@@ -40,7 +40,7 @@ public class HotelRoomApp implements Callable<Void> {
 				roomController.allRooms();
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				
 			}
 		});
 		return null;

@@ -19,9 +19,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-
-
 public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTestable {
 
 	private static final long serialVersionUID = 1L;
