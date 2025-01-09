@@ -11,33 +11,32 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.VerificationCollector;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 public class RoomPostgresRepositoryTest {
 
-//	private static final String jdbcUrl = "jdbc:postgresql://localhost:5432/testdb"; // Adjust the URL
-//	private static final String username = "postgres"; // Replace with your username
-//	private static final String password = "/Pass@098/"; // Replace with your password
-
+	@Rule
+	public VerificationCollector collector = MockitoJUnit.collector();
 	private Connection connection;
 	private RoomPostgresRepository roomRepository;
-	
+
 	@SuppressWarnings("resource")
-	public static final PostgreSQLContainer<?> postgres =
-	        new PostgreSQLContainer<>("postgres:16-alpine")
-	            .withDatabaseName("testdb")
-	            .withUsername("testuser")
-	            .withPassword("testpass");
+	public static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine")
+			.withDatabaseName("testdb").withUsername("testuser").withPassword("testpass");
 
 	@Before
 	public void setup() throws Exception {
-		
+
 		postgres.start();
-		
-        String jdbcUrl = postgres.getJdbcUrl();
-        String username = postgres.getUsername();
-        String password = postgres.getPassword();
+
+		String jdbcUrl = postgres.getJdbcUrl();
+		String username = postgres.getUsername();
+		String password = postgres.getPassword();
 		// Connect to the PostgreSQL database
 		connection = DriverManager.getConnection(jdbcUrl, username, password);
 		roomRepository = new RoomPostgresRepository(jdbcUrl, username, password);
@@ -140,6 +139,82 @@ public class RoomPostgresRepositoryTest {
 
 		// Assert
 		assertThat(fetchedRoom).isNull();
+	}
+
+	@Test
+	public void testFindAllThrowsException() throws Exception {
+		// Arrange
+		Connection mockConnection = Mockito.mock(Connection.class);
+		Mockito.when(mockConnection.prepareStatement(Mockito.anyString()))
+				.thenThrow(new SQLException("Test SQL Exception"));
+
+		RoomPostgresRepository repo = new RoomPostgresRepository(mockConnection); // Use mock connection
+
+		// Act
+		List<Room> result = repo.findAll();
+
+		// Assert
+		assertThat(result).isEmpty(); // Verify empty list when exception occurs
+		Mockito.verify(mockConnection, Mockito.times(1)).prepareStatement(Mockito.anyString());
+	}
+
+	@Test
+	public void testFindByIdThrowsException() throws Exception {
+		// Arrange
+		Connection mockConnection = Mockito.mock(Connection.class);
+		PreparedStatement mockStatement = Mockito.mock(PreparedStatement.class);
+		Mockito.when(mockConnection.prepareStatement(Mockito.anyString())).thenReturn(mockStatement);
+		Mockito.when(mockStatement.executeQuery()).thenThrow(new SQLException("Test SQL Exception"));
+
+		RoomPostgresRepository repo = new RoomPostgresRepository(mockConnection); // Use mock connection
+
+		// Act
+		Room result = repo.findById("1");
+
+		// Assert
+		assertThat(result).isNull(); // Verify null when exception occurs
+		Mockito.verify(mockConnection, Mockito.times(1)).prepareStatement(Mockito.anyString());
+		Mockito.verify(mockStatement, Mockito.times(1)).setString(1, "1");
+	}
+
+	@Test
+	public void testSaveThrowsException() throws Exception {
+		// Arrange
+		Connection mockConnection = Mockito.mock(Connection.class);
+		PreparedStatement mockStatement = Mockito.mock(PreparedStatement.class);
+		Mockito.when(mockConnection.prepareStatement(Mockito.anyString())).thenReturn(mockStatement);
+		Mockito.doThrow(new SQLException("Test SQL Exception")).when(mockStatement).executeUpdate();
+
+		RoomPostgresRepository repo = new RoomPostgresRepository(mockConnection); // Use mock connection
+
+		// Act
+		repo.save(new Room("1", "Test Room"));
+
+		// Assert
+		Mockito.verify(mockConnection, Mockito.times(1)).prepareStatement(Mockito.anyString());
+		Mockito.verify(mockStatement, Mockito.times(1)).setString(1, "1");
+		Mockito.verify(mockStatement, Mockito.times(1)).setString(2, "Test Room");
+		Mockito.verify(mockStatement, Mockito.times(1)).executeUpdate();
+	}
+
+	@Test
+	public void testDeleteThrowsException() throws Exception {
+		// Arrange
+		Connection mockConnection = Mockito.mock(Connection.class);
+		PreparedStatement mockStatement = Mockito.mock(PreparedStatement.class);
+		Mockito.when(mockConnection.prepareStatement(Mockito.anyString())).thenReturn(mockStatement);
+		Mockito.doThrow(new SQLException("Test SQL Exception")).when(mockStatement).executeUpdate();
+
+		RoomPostgresRepository repo = new RoomPostgresRepository(mockConnection);
+
+		// Act
+		repo.delete("1");
+
+		// Assert
+		// Verify no propagated exception and interactions with the mock
+		Mockito.verify(mockConnection, Mockito.times(1)).prepareStatement(Mockito.anyString());
+		Mockito.verify(mockStatement, Mockito.times(1)).setString(1, "1");
+		Mockito.verify(mockStatement, Mockito.times(1)).executeUpdate();
 	}
 
 	private void addTestRoomToDatabase(String id, String description) {

@@ -9,49 +9,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoomPostgresRepository implements RoomRepository {
-	private String dbUser = System.getenv("DB_USER");
-	private String url = System.getenv("DB_URL");
-	private String dbPassword = System.getenv("DB_PASSWORD");
 
 	private Connection connection;
 
-	public RoomPostgresRepository() {
-		try {
-			connection = DriverManager.getConnection(url, dbUser, dbPassword);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public RoomPostgresRepository(String url, String dbUser, String dbpassword) throws SQLException {
+
+		connection = DriverManager.getConnection(url, dbUser, dbpassword);
+
 	}
 
 	// for test
-	public RoomPostgresRepository(String url, String dbUser, String dbpassword) {
-		try {
-			connection = DriverManager.getConnection(url, dbUser, dbpassword);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public RoomPostgresRepository(Connection connection) throws SQLException {
+		this.connection = connection;
 	}
 
 	@Override
 	public List<Room> findAll() {
 		List<Room> rooms = new ArrayList<>();
-		String sql = "SELECT * FROM rooms";
+		String sql = "SELECT room_number,room_description FROM rooms";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
 				rooms.add(new Room(resultSet.getString("room_number"), resultSet.getString("room_description")));
 			}
-			System.err.println(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new SQLException("Test SQL Exception");
 		}
-		System.out.println(rooms);
 		return rooms;
 	}
 
 	@Override
 	public Room findById(String room_number) {
-		String sql = "SELECT * FROM rooms WHERE room_number = ?";
+		String sql = "SELECT room_number,room_description FROM rooms WHERE room_number = ?";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setString(1, room_number);
 			ResultSet resultSet = statement.executeQuery();
@@ -59,7 +48,7 @@ public class RoomPostgresRepository implements RoomRepository {
 				return new Room(resultSet.getString("room_number"), resultSet.getString("room_description"));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new SQLException("Test SQL Exception");
 		}
 		return null;
 	}
@@ -72,7 +61,7 @@ public class RoomPostgresRepository implements RoomRepository {
 			statement.setString(2, room.getDescription());
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new SQLException("Test SQL Exception");
 		}
 
 	}
@@ -85,7 +74,7 @@ public class RoomPostgresRepository implements RoomRepository {
 			statement.setString(1, room_number);
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new SQLException("Test SQL Exception");
 		}
 	}
 

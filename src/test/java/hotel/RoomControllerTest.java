@@ -11,14 +11,20 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.VerificationCollector;
 
 public class RoomControllerTest {
 
+	
+	@Rule
+	public VerificationCollector collector = MockitoJUnit.collector();
 	@Mock
 	private RoomRepository roomRepository;
 

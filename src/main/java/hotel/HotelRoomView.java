@@ -38,17 +38,6 @@ public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTest
 
 	private DefaultListModel<Room> listRoomsModel;
 
-	/*
-	 * public static void main(String[] args) {
-	 * 
-	 * 
-	 * EventQueue.invokeLater(() -> { try { HotelRoomView frame = new
-	 * HotelRoomView(); frame.setVisible(true);
-	 * 
-	 * } catch (Exception e) { e.printStackTrace(); } });
-	 * 
-	 * }
-	 */
 
 	DefaultListModel<Room> getListRoomModel() {
 		return listRoomsModel;
@@ -120,33 +109,29 @@ public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTest
 		btnDelete.setName("btnDelete");
 		btnDelete.setEnabled(false);
 		btnDelete.setBounds(288, 553, 140, 27);
-		btnDelete.addActionListener(e -> {
-			roomController.deleteRoom(lstDisplayRooms.getSelectedValue());
-		});
+		btnDelete.addActionListener(e -> 
+			roomController.deleteRoom(lstDisplayRooms.getSelectedValue())
+		);
 		contentPane.add(btnDelete);
 
 		listRoomsModel = new DefaultListModel<>();
 		lstDisplayRooms = new JList<>(listRoomsModel);
 		lstDisplayRooms.setName("lstDisplayRooms");
-		lstDisplayRooms.addListSelectionListener(e -> {
-			btnDelete.setEnabled(lstDisplayRooms.getSelectedIndex() != -1);
-		});
+		lstDisplayRooms.addListSelectionListener(e -> 
+			btnDelete.setEnabled(lstDisplayRooms.getSelectedIndex() != -1)
+		);
 		lstDisplayRooms.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(lstDisplayRooms);
 
 		btnPublish = new JButton("Publish Room");
 		btnPublish.setEnabled(false);
 		btnPublish.setName("btnPublish");
-		btnPublish.addActionListener(e -> {
-			roomController.newRoom(new Room(txtRoomNumber.getText(), txtRoomDescription.getText()));
-		});
+		btnPublish.addActionListener(e -> 
+			roomController.newRoom(new Room(txtRoomNumber.getText(), txtRoomDescription.getText()))
+		);
 
 		btnPublish.setBounds(31, 233, 624, 45);
 		contentPane.add(btnPublish);
-
-		// Integer roomNumber = Integer.parseInt(txtRoomNumber.getText());
-		// Double amount = Double.parseDouble(txtRoomAmount.getText());
-		// String roomDescription = txtRoomDescription.getText();
 
 		lbDisplayStatus = new JLabel("");
 		lbDisplayStatus.setName("lbDisplayStatus");

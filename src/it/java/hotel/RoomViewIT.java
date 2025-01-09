@@ -38,7 +38,7 @@ public class RoomViewIT extends AssertJSwingJUnitTestCase {
 
 	@Override
 	protected void onSetUp() throws Exception {
-		// TODO Auto-generated method stub
+
 		// Start the container
 		postgres.start();
 
@@ -71,10 +71,7 @@ public class RoomViewIT extends AssertJSwingJUnitTestCase {
 
 	@AfterClass
 	public static void shutdownServer() throws Exception {
-		// Clean up the database
-//        try (Statement statement = connection.createStatement()) {
-//            statement.execute("DROP TABLE IF EXISTS rooms");
-//        }
+
 		if (connection != null) {
 			connection.close();
 		}
@@ -108,7 +105,7 @@ public class RoomViewIT extends AssertJSwingJUnitTestCase {
 		window.textBox("txtRoomNumber").enterText("101");
 		window.textBox("txtRoomDescription").enterText("Deluxe Suite");
 		GuiActionRunner.execute(() -> hotelRoomView.getBtnPublish().doClick());
-		// window.button(JButtonMatcher.withText("Publish Room")).click();
+
 		// Verify that the room is correctly added to the list
 		assertThat(window.list("lstDisplayRooms").contents())
 				.containsExactly(new Room("101", "Deluxe Suite").toString());
@@ -123,7 +120,7 @@ public class RoomViewIT extends AssertJSwingJUnitTestCase {
 		window.textBox("txtRoomNumber").enterText("101");
 		window.textBox("txtRoomDescription").enterText("Existing Room");
 		GuiActionRunner.execute(() -> hotelRoomView.getBtnPublish().doClick());
-		// window.button(JButtonMatcher.withText("Publish Room")).click();
+
 		// Verify that the list has not changed
 		assertThat(window.list("lstDisplayRooms").contents()).isEmpty();
 		// Verify that the error message is displayed
@@ -134,7 +131,7 @@ public class RoomViewIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testDeleteButtonSuccess() {
 		// Use the controller to populate the view's list
-		// roomRepository.save(new Room("101", "To Be Removed"));
+
 		GuiActionRunner.execute(() -> roomController.newRoom(new Room("101", "To Be Removed")));
 
 		// Select the room from the list and delete it
@@ -142,7 +139,7 @@ public class RoomViewIT extends AssertJSwingJUnitTestCase {
 			hotelRoomView.getLstDisplayRooms().setSelectedIndex(0);
 			hotelRoomView.getBtnDelete().doClick();
 		});
-		// window.button(JButtonMatcher.withText("Delete Room")).click();
+
 		// Verify that the room has been removed from the list
 		assertThat(window.list("lstDisplayRooms").contents()).isEmpty();
 	}
