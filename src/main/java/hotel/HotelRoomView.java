@@ -27,11 +27,14 @@ public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTest
 	private JTextArea txtRoomDescription;
 	private JLabel lblDescription;
 	private JScrollPane scrollPane;
-	private JScrollPane scrollPane_1;
+	private JScrollPane scrollPane1;
 
-	private RoomController roomController;
+	private transient RoomController roomController;
 
-	private JButton btnPublish, btnDelete;
+	private JButton btnPublish;
+	
+	private JButton btnDelete;
+	
 	private JList<Room> lstDisplayRooms;
 
 	private JLabel lbDisplayStatus;
@@ -47,17 +50,19 @@ public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTest
 
 		this.roomController = roomController;
 	}
+	
+	private static int exitCode = JFrame.EXIT_ON_CLOSE;
 
 	/**
 	 * Create the frame.
 	 */
 	public HotelRoomView() {
 		setTitle("Room Manager");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(exitCode);
 
 		setBounds(100, 100, 692, 636);
 		contentPane = new JPanel();
-		// contentPane.setName("contentPane");
+		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -81,11 +86,11 @@ public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTest
 		contentPane.add(txtRoomNumber);
 		txtRoomNumber.setColumns(10);
 
-		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setName("scrollPane_1");
-		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane_1.setBounds(214, 58, 441, 158);
-		contentPane.add(scrollPane_1);
+		scrollPane1 = new JScrollPane();
+		scrollPane1.setName("scrollPane1");
+		scrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane1.setBounds(214, 58, 441, 158);
+		contentPane.add(scrollPane1);
 
 		txtRoomDescription = new JTextArea();
 		txtRoomDescription.setName("txtRoomDescription");
@@ -93,7 +98,7 @@ public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTest
 		txtRoomDescription.setWrapStyleWord(true);
 		txtRoomDescription.setLineWrap(true);
 		txtRoomDescription.addKeyListener(btnAddEnabler);
-		scrollPane_1.setViewportView(txtRoomDescription);
+		scrollPane1.setViewportView(txtRoomDescription);
 
 		lblDescription = new JLabel("Description");
 		lblDescription.setName("lblDescription");

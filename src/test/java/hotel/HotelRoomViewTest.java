@@ -73,7 +73,7 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		window.label(JLabelMatcher.withText("Description"));
 		window.textBox("txtRoomDescription").requireEnabled();
 		window.scrollPane("scrollPane").isEnabled();
-		window.scrollPane("scrollPane_1").isEnabled();
+		window.scrollPane("scrollPane1").isEnabled();
 		window.button(JButtonMatcher.withText("Publish Room")).requireDisabled();
 		window.button(JButtonMatcher.withText("Delete Room")).requireDisabled();
 		window.list("lstDisplayRooms");
