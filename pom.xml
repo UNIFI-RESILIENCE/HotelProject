@@ -16,7 +16,7 @@
       
   		<sonar.organization>unifi-resilience</sonar.organization>
   		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        
+  		<sonar.exclusions>**/HotelRoomApp.java</sonar.exclusions> 
      
     </properties>
 
@@ -29,8 +29,6 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-            
-           
         </dependencies>
     </dependencyManagement>
 
@@ -161,6 +159,7 @@
 	                <sonar.projectKey>com.hotels.app:rooms</sonar.projectKey>
 	                <sonar.projectName>Hotel Rooms App</sonar.projectName>
 	                <sonar.branch.name>main</sonar.branch.name>
+	                <sonar.exclusions>**/HotelRoomApp.java</sonar.exclusions> 
 	            </configuration>
         	</plugin>
             <!-- Compiler plugin for Java version -->

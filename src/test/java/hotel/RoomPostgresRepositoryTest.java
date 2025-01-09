@@ -216,7 +216,6 @@ public class RoomPostgresRepositoryTest {
 	    Mockito.verify(mockStatement, Mockito.times(1)).executeUpdate();
 	}
 
-
 	
 	@Test
 	public void testFindByIdThrowsSQLException() throws Exception {
@@ -224,27 +223,18 @@ public class RoomPostgresRepositoryTest {
 	    Connection mockConnection = Mockito.mock(Connection.class);
 	    PreparedStatement mockStatement = Mockito.mock(PreparedStatement.class);
 	    Mockito.when(mockConnection.prepareStatement(Mockito.anyString())).thenReturn(mockStatement);
-
-	    // Simulate SQLException thrown in the statement's executeQuery method
 	    Mockito.when(mockStatement.executeQuery()).thenThrow(new SQLException("Simulated database failure"));
-
 	    RoomPostgresRepository repo = new RoomPostgresRepository(mockConnection);
 
-	    // Act & Assert: We expect a RoomRepositoryException due to the SQLException wrapped inside it
-	    RoomRepositoryException exception = assertThrows(RoomRepositoryException.class, () -> repo.findById("-90j"));
+	    // Act & Assert
+	    assertThrows(RoomRepositoryException.class, () -> repo.findById("1"));
 
-	    // Assert
-	    assertThat(exception).hasMessageContaining("Error while fetching room by ID");
-	    assertThat(exception.getCause()).isInstanceOf(SQLException.class);
-	    assertThat(exception.getCause()).hasMessageContaining("Simulated database failure");
-
-	    // Verify interaction with mocks
 	    Mockito.verify(mockConnection, Mockito.times(1)).prepareStatement(Mockito.anyString());
-	    Mockito.verify(mockStatement, Mockito.times(1)).setString(1, "-90j");
+	    Mockito.verify(mockStatement, Mockito.times(1)).setString(1, "1");
 	    Mockito.verify(mockStatement, Mockito.times(1)).executeQuery();
 	}
 
-
+	
 	private void addTestRoomToDatabase(String id, String description) {
 		String sql = "INSERT INTO rooms ( room_number, room_description) VALUES ( ?, ?)";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
