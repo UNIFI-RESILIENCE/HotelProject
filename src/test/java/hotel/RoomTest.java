@@ -71,7 +71,7 @@ public class RoomTest {
         // Arrange
         Room room1 = new Room(null, null);
         Room room2 = new Room(null, null);
-
+        assertThat(room1.equals(null)).isFalse();
         // Assert
         assertThat(room1).isEqualTo(room2); // Ensure equality when both fields are null
         assertThat(room1.hashCode()).hasSameHashCodeAs(room2.hashCode());
@@ -82,7 +82,7 @@ public class RoomTest {
         // Arrange
         Room room1 = new Room("1", null);
         Room room2 = new Room("1", "Standard Room");
-
+        assertThat(room1.equals(null)).isFalse();
         // Assert
         assertThat(room1).isNotEqualTo(room2); // Ensure non-equality when one field is null
     }
