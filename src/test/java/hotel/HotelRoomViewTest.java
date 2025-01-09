@@ -126,7 +126,7 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 
 		// Assert: Verify the error label shows the correct error message
 		
-		assertThat(window.label("lbDisplayStatus").requireText("error message: " + room));
+		assertThat(window.label("lbDisplayStatus").text()).isEqualTo("error message: " + room);
 	}
 
 	@Test
