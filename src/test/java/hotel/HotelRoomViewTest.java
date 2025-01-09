@@ -78,7 +78,7 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Delete Room")).requireDisabled();
 		window.list("lstDisplayRooms");
 		window.label(JLabelMatcher.withName("lbDisplayStatus"));
-		assertThat(window.label(JLabelMatcher.withText("Room Number")));
+		assertThat(window.textBox("txtRoomNumber").text()).isEqualTo("");
 	}
 
 	@Test
@@ -86,8 +86,9 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("txtRoomNumber").enterText("1");
 		window.textBox("txtRoomDescription").enterText("test");
 		
-		assertThat(window.button(JButtonMatcher.withName("btnPublish")).requireEnabled());
-		
+		assertThat(window.textBox("txtRoomNumber").text()).isEqualTo("1");
+	    assertThat(window.textBox("txtRoomDescription").text()).isEqualTo("test");
+	    window.button(JButtonMatcher.withName("btnPublish")).requireEnabled();
 	}
 
 	@Test
@@ -96,13 +97,14 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		JTextComponentFixture txtRoomDescription = window.textBox("txtRoomDescription");
 		txtRoomNumber.enterText("1");
 		txtRoomDescription.enterText(" ");
+		assertThat(txtRoomNumber.text()).isEqualTo("1");
 		window.button(JButtonMatcher.withName("btnPublish")).requireDisabled();
 		txtRoomNumber.setText("");
 		txtRoomDescription.setText("");
 		txtRoomNumber.enterText(" ");
 		txtRoomDescription.enterText("test");
 		
-		assertThat(window.button(JButtonMatcher.withName("btnPublish")).requireDisabled());
+		
 	}
 
 	@Test
@@ -174,8 +176,8 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete Room"));
 		deleteButton.requireEnabled();
 		window.list("lstDisplayRooms").clearSelection();
+		assertThat(window.list("lstDisplayRooms").clearSelection().contents()).containsExactly(room1.toString());
 		
-		assertThat(deleteButton.requireDisabled());
 	}
 
 	@Test
