@@ -78,14 +78,16 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Delete Room")).requireDisabled();
 		window.list("lstDisplayRooms");
 		window.label(JLabelMatcher.withName("lbDisplayStatus"));
-
+		assertThat(window.label(JLabelMatcher.withText("Room Number")));
 	}
 
 	@Test
 	public void testWhenIdAndRoomAreNonEmptyThenAddButtonShouldBeEnabled() {
 		window.textBox("txtRoomNumber").enterText("1");
 		window.textBox("txtRoomDescription").enterText("test");
-		window.button(JButtonMatcher.withName("btnPublish")).requireEnabled();
+		
+		assertThat(window.button(JButtonMatcher.withName("btnPublish")).requireEnabled());
+		
 	}
 
 	@Test
@@ -99,7 +101,8 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		txtRoomDescription.setText("");
 		txtRoomNumber.enterText(" ");
 		txtRoomDescription.enterText("test");
-		window.button(JButtonMatcher.withName("btnPublish")).requireDisabled();
+		
+		assertThat(window.button(JButtonMatcher.withName("btnPublish")).requireDisabled());
 	}
 
 	@Test
@@ -120,7 +123,8 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> hotelRoomView.showError("error message", room));
 
 		// Assert: Verify the error label shows the correct error message
-		window.label("lbDisplayStatus").requireText("error message: " + room);
+		
+		assertThat(window.label("lbDisplayStatus").requireText("error message: " + room));
 	}
 
 	@Test
@@ -170,7 +174,8 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete Room"));
 		deleteButton.requireEnabled();
 		window.list("lstDisplayRooms").clearSelection();
-		deleteButton.requireDisabled();
+		
+		assertThat(deleteButton.requireDisabled());
 	}
 
 	@Test
