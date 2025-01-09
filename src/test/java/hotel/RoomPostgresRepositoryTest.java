@@ -63,7 +63,7 @@ public class RoomPostgresRepositoryTest {
 
 	@Test
 
-	public void testSaveRoom() throws Exception {
+	public void testSaveRoom() {
 		// Arrange
 		Room room = new Room("1", "John Doe");
 
@@ -78,7 +78,7 @@ public class RoomPostgresRepositoryTest {
 	}
 
 	@Test
-	public void testGetAllRooms() throws Exception {
+	public void testGetAllRooms()  {
 		// Arrange
 		roomRepository.save(new Room("1", "Alice"));
 		roomRepository.save(new Room("2", "Bob"));

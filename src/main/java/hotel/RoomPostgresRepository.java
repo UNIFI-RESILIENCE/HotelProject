@@ -39,10 +39,10 @@ public class RoomPostgresRepository implements RoomRepository {
 	}
 
 	@Override
-	public Room findById(String room_number) {
+	public Room findById(String roomNumber) {
 		String sql = "SELECT room_number,room_description FROM rooms WHERE room_number = ?";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
-			statement.setString(1, room_number);
+			statement.setString(1, roomNumber);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				return new Room(resultSet.getString("room_number"), resultSet.getString("room_description"));
@@ -67,11 +67,11 @@ public class RoomPostgresRepository implements RoomRepository {
 	}
 
 	@Override
-	public void delete(String room_number) {
+	public void delete(String roomNumber) {
 
 		String sql = "DELETE FROM rooms WHERE room_number = ?";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
-			statement.setString(1, room_number);
+			statement.setString(1, roomNumber);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new RoomRepositoryException("Error while deleting room", e);

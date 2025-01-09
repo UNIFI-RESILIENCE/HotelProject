@@ -17,7 +17,7 @@ public class RoomTest {
 
         // Assert
         assertThat(room1).isEqualTo(room2);
-        assertThat(room1.hashCode()).isEqualTo(room2.hashCode());
+        assertThat(room1.hashCode()).hasSameHashCodeAs(room2.hashCode());
     }
 
     @Test
