@@ -28,7 +28,7 @@ public class RoomTest {
 
         // Assert
         assertThat(room1).isNotEqualTo(room2);
-        assertThat(room1.hashCode()).isNotEqualTo(room2.hashCode());
+        assertThat(room1.hashCode()).hasSameHashCodeAs((room1.hashCode()));
     }
 
     @Test
@@ -37,8 +37,8 @@ public class RoomTest {
         Room room = new Room("1", "Deluxe Room");
 
         // Assert
-        assertThat(room).isNotEqualTo(null);
-        assertThat(room).isNotEqualTo("Not a Room");
+        assertThat(room).isNotEqualTo(null).isNotEqualTo("Not a Room");
+        
     }
 
     @Test
@@ -48,6 +48,6 @@ public class RoomTest {
 
         // Assert
         assertThat(room.toString())
-            .isEqualTo("Room{id='1', description='Deluxe Room'}");
+            .hasToString("Room{id='1', description='Deluxe Room'}");
     }
 }

@@ -19,7 +19,7 @@ public class RoomPostgresRepository implements RoomRepository {
 	}
 
 	// for test
-	public RoomPostgresRepository(Connection connection) throws SQLException {
+	public RoomPostgresRepository(Connection connection)  {
 		this.connection = connection;
 	}
 
@@ -33,7 +33,7 @@ public class RoomPostgresRepository implements RoomRepository {
 				rooms.add(new Room(resultSet.getString("room_number"), resultSet.getString("room_description")));
 			}
 		} catch (SQLException e) {
-			throw new RuntimeException("Error while fetching all rooms", e);
+			throw new RoomRepositoryException("Error while fetching all rooms", e);
 		}
 		return rooms;
 	}
@@ -48,7 +48,7 @@ public class RoomPostgresRepository implements RoomRepository {
 				return new Room(resultSet.getString("room_number"), resultSet.getString("room_description"));
 			}
 		} catch (SQLException e) {
-			throw new RuntimeException("Error while fetching room by ID", e);
+			throw new RoomRepositoryException("Error while fetching room by ID", e);
 		}
 		return null;
 	}
@@ -61,7 +61,7 @@ public class RoomPostgresRepository implements RoomRepository {
 			statement.setString(2, room.getDescription());
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			throw new RuntimeException("Error while saving room", e);
+			throw new RoomRepositoryException("Error while saving room", e);
 		}
 
 	}
@@ -74,7 +74,7 @@ public class RoomPostgresRepository implements RoomRepository {
 			statement.setString(1, room_number);
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			throw new RuntimeException("Error while deleting room", e);
+			throw new RoomRepositoryException("Error while deleting room", e);
 		}
 	}
 

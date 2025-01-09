@@ -186,9 +186,10 @@ public class RoomPostgresRepositoryTest {
 	    Mockito.doThrow(new SQLException("Test SQL Exception")).when(mockStatement).executeUpdate();
 
 	    RoomPostgresRepository repo = new RoomPostgresRepository(mockConnection);
+	    Room room = new Room("1", "Test Room");
 
 	    // Act & Assert
-	    assertThrows(RuntimeException.class, () -> repo.save(new Room("1", "Test Room")));
+	    assertThrows(null, RuntimeException.class, () -> repo.save(room));
 
 	    Mockito.verify(mockConnection, Mockito.times(1)).prepareStatement(Mockito.anyString());
 	    Mockito.verify(mockStatement, Mockito.times(1)).setString(1, "1");

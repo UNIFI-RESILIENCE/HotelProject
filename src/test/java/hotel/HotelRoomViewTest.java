@@ -78,7 +78,7 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Delete Room")).requireDisabled();
 		window.list("lstDisplayRooms");
 		window.label(JLabelMatcher.withName("lbDisplayStatus"));
-		assertThat(window.textBox("txtRoomNumber").text()).isEqualTo("");
+		assertThat(window.textBox("txtRoomNumber").text()).isEmpty();
 	}
 
 	@Test
