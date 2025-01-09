@@ -19,6 +19,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+
+
 public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTestable {
 
 	private static final long serialVersionUID = 1L;
@@ -51,14 +54,12 @@ public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTest
 		this.roomController = roomController;
 	}
 	
-	private static int exitCode = JFrame.EXIT_ON_CLOSE;
-
 	/**
 	 * Create the frame.
 	 */
 	public HotelRoomView() {
 		setTitle("Room Manager");
-		setDefaultCloseOperation(exitCode);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		setBounds(100, 100, 692, 636);
 		contentPane = new JPanel();

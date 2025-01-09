@@ -24,7 +24,7 @@ import org.junit.runner.RunWith;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 @RunWith(GUITestRunner.class)
-public class HotelRoomE2E extends AssertJSwingJUnitTestCase {
+public class HotelRoomE2E extends AssertJSwingJUnitTestCase { //NOSONAR
 	private static Connection connection;
 	private FrameFixture window;
 
