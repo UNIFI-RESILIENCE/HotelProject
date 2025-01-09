@@ -19,7 +19,7 @@ public class RoomPostgresRepository implements RoomRepository {
 	}
 
 	// for test
-	public RoomPostgresRepository(Connection connection)  {
+	public RoomPostgresRepository(Connection connection) {
 		this.connection = connection;
 	}
 
@@ -44,9 +44,9 @@ public class RoomPostgresRepository implements RoomRepository {
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setString(1, roomNumber);
 			ResultSet resultSet = statement.executeQuery();
-			if (resultSet.next()) {
+			if (resultSet.next())
 				return new Room(resultSet.getString("room_number"), resultSet.getString("room_description"));
-			}
+
 		} catch (SQLException e) {
 			throw new RoomRepositoryException("Error while fetching room by ID", e);
 		}

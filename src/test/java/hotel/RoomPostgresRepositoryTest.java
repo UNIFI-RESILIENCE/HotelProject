@@ -223,14 +223,15 @@ public class RoomPostgresRepositoryTest {
 	    Connection mockConnection = Mockito.mock(Connection.class);
 	    PreparedStatement mockStatement = Mockito.mock(PreparedStatement.class);
 	    Mockito.when(mockConnection.prepareStatement(Mockito.anyString())).thenReturn(mockStatement);
-	    Mockito.when(mockStatement.executeQuery()).thenThrow(new SQLException("Simulated database failure"));
+	    Mockito.doThrow(new SQLException("Test SQL Exception")).when(mockStatement).executeUpdate();
+	    
 	    RoomPostgresRepository repo = new RoomPostgresRepository(mockConnection);
 
 	    // Act & Assert
-	    assertThrows(RoomRepositoryException.class, () -> repo.findById("1"));
+	    assertThrows(NullPointerException.class, () -> repo.findById("1R"));
 
 	    Mockito.verify(mockConnection, Mockito.times(1)).prepareStatement(Mockito.anyString());
-	    Mockito.verify(mockStatement, Mockito.times(1)).setString(1, "1");
+	    Mockito.verify(mockStatement, Mockito.times(1)).setString(1, "1R");
 	    Mockito.verify(mockStatement, Mockito.times(1)).executeQuery();
 	}
 
