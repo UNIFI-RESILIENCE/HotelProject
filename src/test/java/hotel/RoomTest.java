@@ -106,4 +106,22 @@ public class RoomTest {
         assertThat(room.toString())
             .hasToString("Room{id='1', description='Deluxe Room'}");
     }
+    
+    
+    @Test
+    public void testEqualsHandlesNullAndDifferentClasses() {
+        // Arrange
+        Room room = new Room("1", "Deluxe Room");
+
+        // Assert for `o == null`
+        assertThat(room).isNotEqualTo(null); // Ensure non-equality with null
+
+        // Assert for `getClass() != o.getClass()`
+        assertThat(room.equals("Not a Room")).isFalse(); // Forces evaluation of `getClass() != o.getClass()`
+
+        // Assert for same class comparison with different data
+        Room otherRoom = new Room("2", "Standard Room");
+        assertThat(room).isNotEqualTo(otherRoom); // Ensure it does not return true just due to being same class
+    }
+
 }
