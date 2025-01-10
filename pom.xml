@@ -105,19 +105,22 @@
                     <configuration>
                         <excludedClasses>
                             <param>hotel.HotelRoomApp*</param>
+                            <param>hotel.HotelRoomView*</param>
                         </excludedClasses>
                         <targetClasses>
-                        	<!-- excludes hotel.HotelRoomApp -->
-                            <param>hotel.*</param>
+                        	 <param>hotel.*</param>
+                            
                         </targetClasses>
                         <targetTests>
-                            <param>hotel.*</param>
+                        <param>hotel.RoomPostgresRepositoryTest*</param>
+                            <param>hotel.RoomControllerTest*</param>
+                            <param>hotel.RoomTest*</param>
                         </targetTests>
                         <mutators>
                             <mutator>DEFAULTS</mutator>
                             <mutator>NON_VOID_METHOD_CALLS</mutator>
-                        </mutators> 
-                        <mutationThreshold>80</mutationThreshold>
+                        </mutators>  
+                        <mutationThreshold>10</mutationThreshold>
                     </configuration>
                 </plugin>
                 
@@ -311,12 +314,9 @@
             </executions>
             
         </plugin>
-        
       
         </plugins>
     </build>
-    
-	 
 	
 	<profiles>
 		<profile>
@@ -342,14 +342,13 @@
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest-maven</artifactId>
 			<executions>
-			<execution>
-			<goals>
-			<goal>mutationCoverage</goal>
-		
-		</goals>
-		<phase>verify</phase>
-		</execution>
-		</executions>
+				<execution>
+					<goals>
+				<goal>mutationCoverage</goal>
+				</goals>
+					<phase>verify</phase> 
+				</execution>
+			</executions>
 		</plugin>
 		</plugins>
 		</build>

@@ -33,15 +33,13 @@ public class Room {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
-			return true; // Check if the objects are the same instance
+		 // Check if the objects are the same instance
 		if (o == null)
 			return false; // Check type compatibility
 		if (getClass() != o.getClass())
-			return false; 
+			return false;
 		Room room = (Room) o;
-		return Objects.equals(id, room.id) && // Compare `id`
-				Objects.equals(description, room.description); // Compare `description`
+		return Objects.equals(id, room.id) && Objects.equals(description, room.description); // Compare `description`
 	}
 
 	@Override
