@@ -8,7 +8,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class RoomPostgresRepository implements RoomRepository {
+	private static final Logger LOGGER = LogManager.getLogger(HotelRoomApp.class);
+	
 
 	private  Connection connection;
 	
@@ -40,11 +45,12 @@ public class RoomPostgresRepository implements RoomRepository {
 
 	@Override
 	public Room findById(String roomNumber) {
+		ResultSet resultSet = null;
 		String sql = "SELECT room_number,room_description FROM rooms WHERE room_number = ?";
 		try {
 			PreparedStatement statement = this.connection.prepareStatement(sql);
 			statement.setString(1, roomNumber);
-			ResultSet resultSet = statement.executeQuery();
+			 resultSet = statement.executeQuery();
 			if (resultSet.next())
 				return new Room(resultSet.getString("room_number"), resultSet.getString("room_description"));
 
@@ -52,6 +58,13 @@ public class RoomPostgresRepository implements RoomRepository {
 
 			throw new RoomRepositoryException("Error while fetching findById rooms", e);
 
+		} finally {
+			try {
+				resultSet.close();
+			} catch (SQLException e) {
+				LOGGER.info(e);
+				
+			}
 		}
 		return null;
 	}
