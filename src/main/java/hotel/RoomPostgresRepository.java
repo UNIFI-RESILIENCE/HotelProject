@@ -46,9 +46,16 @@ public class RoomPostgresRepository implements RoomRepository {
 	@Override
 	public Room findById(String roomNumber) {
 		ResultSet resultSet = null;
-		String sql = "SELECT room_number,room_description FROM rooms WHERE room_number = ?";
+		String sql = null;
+		PreparedStatement statement = null;
+		
 		try {
-			PreparedStatement statement = this.connection.prepareStatement(sql);
+			try {
+				 sql = "SELECT room_number,room_description FROM rooms WHERE room_number = ?";
+			} finally {
+				 statement = this.connection.prepareStatement(sql);
+			}
+			
 			statement.setString(1, roomNumber);
 			 resultSet = statement.executeQuery();
 			if (resultSet.next())
