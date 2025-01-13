@@ -42,7 +42,7 @@ public class RoomPostgresRepository implements RoomRepository {
 	public Room findById(String roomNumber) {
 		String sql = "SELECT room_number,room_description FROM rooms WHERE room_number = ?";
 		try {
-			PreparedStatement statement = this.connection.prepareStatement(sql);
+			final PreparedStatement statement = this.connection.prepareStatement(sql);
 			statement.setString(1, roomNumber);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next())
