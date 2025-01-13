@@ -59,12 +59,10 @@ public class RoomPostgresRepository implements RoomRepository {
 			throw new RoomRepositoryException("Error while fetching findById rooms", e);
 
 		} finally {
-			try {
-				resultSet.close();
-			} catch (SQLException e) {
-				LOGGER.info(e);
+			
+				LOGGER.info(resultSet);
 				
-			}
+		
 		}
 		return null;
 	}

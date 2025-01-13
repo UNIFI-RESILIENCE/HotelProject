@@ -241,7 +241,7 @@ public class RoomPostgresRepositoryTest {
 		RoomRepository repository = new RoomPostgresRepository(mockConnection);
 
 		// Act & Assert
-		assertThrows(NullPointerException.class, () -> repository.findById("1R"));
+		assertThrows(RoomRepositoryException.class, () -> repository.findById("1R"));
 
 	}
 
