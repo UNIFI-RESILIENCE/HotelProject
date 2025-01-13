@@ -1,7 +1,9 @@
 package hotel;
 
 public class RoomRepositoryException extends RuntimeException {
-    public RoomRepositoryException(String message, Throwable cause) {
+    private static final long serialVersionUID = 1L;
+
+	public RoomRepositoryException(String message, Throwable cause) {
         super(message, cause);
     }
 }

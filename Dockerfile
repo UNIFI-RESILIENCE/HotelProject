@@ -2,6 +2,9 @@
 FROM openjdk:17-jdk-slim
 
 ARG jarToCopy
+ARG   dbHost
+ARG    dbName
+ARG    dbPassword 
 
 ENV DB_USER=dbmanager \
     DB_URL=jdbc:postgresql://database:5432/hoteldb \

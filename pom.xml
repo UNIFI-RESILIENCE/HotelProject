@@ -10,16 +10,16 @@
     <name>rooms</name>
    
     <url>http://www.example.com</url>
-
+ 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       
   		<sonar.organization>unifi-resilience</sonar.organization>
   		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
   		<sonar.exclusions>**/HotelRoomApp.java</sonar.exclusions> 
-     
-    </properties>
-
+       
+    </properties> 
+  
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -63,7 +63,7 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.4</version>
-        </dependency>
+        </dependency> 
 
         <!-- Mockito for mocking in tests -->
         <dependency>
@@ -86,8 +86,6 @@
 				<version>4.6.1</version>
 			</dependency>
     </dependencies>
-    
-
 
     <build>
         <finalName>hotelroom</finalName>
@@ -243,7 +241,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>hotel.Main</mainClass>
+                            <mainClass>hotel.HotelRoomApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -378,10 +376,10 @@
 							     <composeFile>docker-compose.yml</composeFile>
 							  </external>
 							  
-							<run>
+							<run> 
 							
 							<cmd>ls</cmd>
-							<entryPoint>java -jar /app/app.jar hotel.Main</entryPoint>
+							<entryPoint>java -jar /app/app.jar hotel.HotelRoomApp</entryPoint>
 							 </run>
 							</image>
 							  
@@ -402,7 +400,7 @@
 							<phase>verify</phase>
 							<goals>
 								<goal>start</goal>
-								<goal>stop</goal>
+								
 							</goals>
 							
 						</execution>
@@ -500,7 +498,7 @@
 									</wait>
 									 
 									
-									<cmd>java -jar /app/app.jar hotel.Main</cmd>
+									<cmd>java -jar /app/app.jar hotel.HotelRoomApp</cmd>
 								</run>
 							 </image>
 							  

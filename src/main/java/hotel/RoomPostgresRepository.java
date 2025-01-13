@@ -10,11 +10,11 @@ import java.util.List;
 
 public class RoomPostgresRepository implements RoomRepository {
 
-	private Connection connection;
+	private final Connection connection;
 
 	public RoomPostgresRepository(String url, String dbUser, String dbpassword) throws SQLException {
 
-		connection = DriverManager.getConnection(url, dbUser, dbpassword);
+		this.connection = DriverManager.getConnection(url, dbUser, dbpassword);
 
 	}
 
@@ -41,14 +41,17 @@ public class RoomPostgresRepository implements RoomRepository {
 	@Override
 	public Room findById(String roomNumber) {
 		String sql = "SELECT room_number,room_description FROM rooms WHERE room_number = ?";
-		try (PreparedStatement statement = connection.prepareStatement(sql)) {
+		try {
+			PreparedStatement statement = this.connection.prepareStatement(sql);
 			statement.setString(1, roomNumber);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next())
 				return new Room(resultSet.getString("room_number"), resultSet.getString("room_description"));
 
 		} catch (SQLException e) {
-			throw new RoomRepositoryException("Error while fetching room by ID", e);
+
+			throw new RoomRepositoryException("Error while fetching findById rooms", e);
+
 		}
 		return null;
 	}
