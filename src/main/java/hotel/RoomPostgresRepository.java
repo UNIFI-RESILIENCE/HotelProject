@@ -46,31 +46,21 @@ public class RoomPostgresRepository implements RoomRepository {
 	@Override
 	public Room findById(String roomNumber) {
 		ResultSet resultSet = null;
-		String sql = null;
-		PreparedStatement statement = null;
+		String sql = "SELECT room_number,room_description FROM rooms WHERE room_number = ?";
 		
-		try {
-			try {
-				 sql = "SELECT room_number,room_description FROM rooms WHERE room_number = ?";
-			} finally {
-				 statement = this.connection.prepareStatement(sql);
-			}
+		
+		try(PreparedStatement statement = this.connection.prepareStatement(sql);) {
 			
-			statement.setString(1, roomNumber);
+			 statement.setString(1, roomNumber);
 			 resultSet = statement.executeQuery();
 			if (resultSet.next())
 				return new Room(resultSet.getString("room_number"), resultSet.getString("room_description"));
 
 		} catch (SQLException e) {
-
+			//LOGGER.info(resultSet);
 			throw new RoomRepositoryException("Error while fetching findById rooms", e);
 
-		} finally {
-			
-				LOGGER.info(resultSet);
-				
-		
-		}
+		} 
 		return null;
 	}
 
