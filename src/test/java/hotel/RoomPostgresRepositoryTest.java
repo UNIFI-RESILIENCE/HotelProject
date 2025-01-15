@@ -276,7 +276,7 @@ public class RoomPostgresRepositoryTest {
 		//Room fetchedRoom = roomRepository.findById("-1");
 
 		// Assert
-		assertThrows(RoomRepositoryException.class, () -> repository.findById("1R"));
+		assertThrows(RoomRepositoryException.class, () -> roomRepository.findById("1R"));
 	}
 
 
