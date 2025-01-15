@@ -268,6 +268,18 @@ public class RoomPostgresRepositoryTest {
 	}
 
 
+	public void testFindByIdthrows() {
+		// Arrange
+		addTestRoomToDatabase("1", "Deluxe Room");
+                connect.close();
+		// Act
+		Room fetchedRoom = roomRepository.findById("-1");
+
+		// Assert
+		assertThrows(RoomRepositoryException.class, () -> repository.findById("1R"));
+	}
+
+
 	private void addTestRoomToDatabase(String id, String description) {
 		String sql = "INSERT INTO rooms ( room_number, room_description) VALUES ( ?, ?)";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
