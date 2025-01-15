@@ -271,9 +271,9 @@ public class RoomPostgresRepositoryTest {
 	public void testFindByIdthrows() {
 		// Arrange
 		addTestRoomToDatabase("1", "Deluxe Room");
-                connect.close();
+                connection.close();
 		// Act
-		Room fetchedRoom = roomRepository.findById("-1");
+		//Room fetchedRoom = roomRepository.findById("-1");
 
 		// Assert
 		assertThrows(RoomRepositoryException.class, () -> repository.findById("1R"));
