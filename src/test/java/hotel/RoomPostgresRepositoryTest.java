@@ -1,12 +1,9 @@
 package hotel;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.Connection;
@@ -249,36 +246,42 @@ public class RoomPostgresRepositoryTest {
 
 	}
 
-
 	@Test
 	public void testCatchBlockTriggeredBySQLException() throws SQLException {
-	    // Arrange
-	    Connection mockConnection = mock(Connection.class);
-	    PreparedStatement mockStatement = mock(PreparedStatement.class);
+		// Arrange
+		Connection mockConnection = mock(Connection.class);
+		PreparedStatement mockStatement = mock(PreparedStatement.class);
 
-	    // Simulate incorrect SQL causing an SQLException
-	    when(mockConnection.prepareStatement(anyString())).thenReturn(mockStatement);
-	    when(mockStatement.executeQuery()).thenThrow(new SQLException("Simulated SQL Exception"));
+		// Simulate incorrect SQL causing an SQLException
+		when(mockConnection.prepareStatement(anyString())).thenReturn(mockStatement);
+		when(mockStatement.executeQuery()).thenThrow(new SQLException("Simulated SQL Exception"));
 
-	    RoomPostgresRepository repository = new RoomPostgresRepository(mockConnection);
-	    mockConnection.close();
+		RoomPostgresRepository repository = new RoomPostgresRepository(mockConnection);
+		mockConnection.close();
 
-	    // Act
-	    assertThrows(RoomRepositoryException.class, () -> repository.findById("1R"));
+		// Act
+		assertThrows(RoomRepositoryException.class, () -> repository.findById("1R"));
 	}
 
-
-	public void testFindByIdthrows() {
+	public void testFindByIdthrows() throws SQLException {
 		// Arrange
 		addTestRoomToDatabase("1", "Deluxe Room");
-                connection.close();
+		try {
+			connection.close();
+			if(connection.isClosed())
+				System.err.println("connection closed");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			if(connection.isClosed())
+				System.err.println("connection closed");
+			e.printStackTrace();
+		}
 		// Act
-		//Room fetchedRoom = roomRepository.findById("-1");
+		// Room fetchedRoom = roomRepository.findById("-1");
 
 		// Assert
 		assertThrows(RoomRepositoryException.class, () -> roomRepository.findById("1R"));
 	}
-
 
 	private void addTestRoomToDatabase(String id, String description) {
 		String sql = "INSERT INTO rooms ( room_number, room_description) VALUES ( ?, ?)";
