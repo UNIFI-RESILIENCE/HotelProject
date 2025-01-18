@@ -271,14 +271,11 @@ public class RoomPostgresRepositoryTest {
 			if(connection.isClosed())
 				System.err.println("connection closed");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			if(connection.isClosed())
 				System.err.println("connection closed");
-			e.printStackTrace();
 		}
-		// Act
-		// Room fetchedRoom = roomRepository.findById("-1");
-
+		
 		// Assert
 		assertThrows(RoomRepositoryException.class, () -> roomRepository.findById("1R"));
 	}
