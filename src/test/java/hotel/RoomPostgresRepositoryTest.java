@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.VerificationCollector;
+import org.postgresql.util.PSQLException;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 public class RoomPostgresRepositoryTest {
@@ -65,7 +66,6 @@ public class RoomPostgresRepositoryTest {
 	}
 
 	@Test
-
 	public void testSaveRoom() {
 		// Arrange
 		Room room = new Room("1", "John Doe");
@@ -78,6 +78,8 @@ public class RoomPostgresRepositoryTest {
 		assertThat(fetchedRoom).isNotNull();
 		assertThat(fetchedRoom.getDescription()).isEqualTo("John Doe");
 		assertThat(fetchedRoom.getId()).isEqualTo("1");
+		assertThat(fetchedRoom).isNotNull().extracting(Room::getId, Room::getDescription).containsExactly("1",
+				"John Doe");
 	}
 
 	@Test
@@ -105,19 +107,6 @@ public class RoomPostgresRepositoryTest {
 		assertThat(roomRepository.findAll()).containsExactly(new Room("1", "test1"), new Room("2", "test2"));
 	}
 
-	@Test
-	public void testSave() {
-		// Arrange
-		Room room = new Room("1", "Deluxe Room");
-
-		// Act
-		roomRepository.save(room);
-		Room fetchedRoom = roomRepository.findById("1");
-
-		// Assert
-		assertThat(fetchedRoom).isNotNull().extracting(Room::getId, Room::getDescription).containsExactly("1",
-				"Deluxe Room");
-	}
 
 	@Test
 	public void testFindById() {
@@ -198,24 +187,9 @@ public class RoomPostgresRepositoryTest {
 		Mockito.verify(mockStatement, Mockito.times(1)).executeUpdate();
 	}
 
+
+
 	@Test
-	public void testFindByIdThrowsSQLException() throws Exception {
-		// Arrange
-		Connection mockConnection = Mockito.mock(Connection.class);
-		PreparedStatement mockStatement = Mockito.mock(PreparedStatement.class);
-		Mockito.when(mockConnection.prepareStatement(Mockito.anyString())).thenReturn(mockStatement);
-		Mockito.doThrow(new SQLException("Test SQL Exception")).when(mockStatement).executeUpdate();
-
-		RoomPostgresRepository repo = new RoomPostgresRepository(mockConnection);
-
-		// Act & Assert
-		assertThrows(NullPointerException.class, () -> repo.findById("1R"));
-
-		Mockito.verify(mockConnection, Mockito.times(1)).prepareStatement(Mockito.anyString());
-		Mockito.verify(mockStatement, Mockito.times(1)).setString(1, "1R");
-		Mockito.verify(mockStatement, Mockito.times(1)).executeQuery();
-	}
-
 	public void testFindByIdReturnsNull() {
 		// Arrange
 		addTestRoomToDatabase("1", "Deluxe Room");
@@ -228,23 +202,6 @@ public class RoomPostgresRepositoryTest {
 
 	}
 
-	@Test
-	public void testFindByIdThrowsExceptionReturnsNull() throws SQLException {
-		// Arrange
-
-		Connection mockConnection = mock(Connection.class);
-		PreparedStatement mockStatement = mock(PreparedStatement.class);
-
-		when(mockConnection.prepareStatement("SELECT room_number,room_description FROM rooms WHERE room_number = ?"))
-				.thenReturn(mockStatement);
-		when(mockStatement.executeQuery()).thenThrow(new SQLException("Simulated SQL Exception"));
-
-		RoomRepository repository = new RoomPostgresRepository(mockConnection);
-
-		// Act & Assert
-		assertThrows(RoomRepositoryException.class, () -> repository.findById("1R"));
-
-	}
 
 	@Test
 	public void testCatchBlockTriggeredBySQLException() throws SQLException {
@@ -257,28 +214,27 @@ public class RoomPostgresRepositoryTest {
 		when(mockStatement.executeQuery()).thenThrow(new SQLException("Simulated SQL Exception"));
 
 		RoomPostgresRepository repository = new RoomPostgresRepository(mockConnection);
-		mockConnection.close();
 
 		// Act
 		assertThrows(RoomRepositoryException.class, () -> repository.findById("1R"));
 	}
+	
 
+	@Test
 	public void testFindByIdthrows() throws SQLException {
 		// Arrange
 		addTestRoomToDatabase("1", "Deluxe Room");
-		try {
-			connection.close();
-			if(connection.isClosed())
-				System.err.println("connection closed");
-		} catch (SQLException e) {
+		try(Connection connectionx = DriverManager.getConnection(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword());) {
+			connectionx.close();
+			RoomPostgresRepository repository = new RoomPostgresRepository(connectionx);
+			// Assert
+			assertThrows(RoomRepositoryException.class, () -> repository.findById("1R")); 
 			
-			if(connection.isClosed())
-				System.err.println("connection closed");
-		}
-		
-		// Assert
-		assertThrows(RoomRepositoryException.class, () -> roomRepository.findById("1R"));
+		} 
+			
 	}
+	
+
 
 	private void addTestRoomToDatabase(String id, String description) {
 		String sql = "INSERT INTO rooms ( room_number, room_description) VALUES ( ?, ?)";
@@ -286,7 +242,6 @@ public class RoomPostgresRepositoryTest {
 			statement.setString(1, id);
 			statement.setString(2, description);
 			statement.executeUpdate();
-			System.out.println(statement);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -6,8 +6,6 @@
 &nbsp;
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=com.hotels.app%3Arooms&metric=bugs)](https://sonarcloud.io/summary/new_code?id=com.hotels.app%3Arooms) 
 &nbsp;
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.hotels.app%3Arooms&metric=coverage)](https://sonarcloud.io/summary/new_code?id=com.hotels.app%3Arooms) 
-&nbsp;
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=com.hotels.app%3Arooms&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=com.hotels.app%3Arooms) 
 &nbsp;
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=com.hotels.app%3Arooms&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=com.hotels.app%3Arooms) 
