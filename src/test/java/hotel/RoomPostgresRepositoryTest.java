@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.VerificationCollector;
-import org.postgresql.util.PSQLException;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 public class RoomPostgresRepositoryTest {
@@ -107,7 +106,6 @@ public class RoomPostgresRepositoryTest {
 		assertThat(roomRepository.findAll()).containsExactly(new Room("1", "test1"), new Room("2", "test2"));
 	}
 
-
 	@Test
 	public void testFindById() {
 		// Arrange
@@ -187,8 +185,6 @@ public class RoomPostgresRepositoryTest {
 		Mockito.verify(mockStatement, Mockito.times(1)).executeUpdate();
 	}
 
-
-
 	@Test
 	public void testFindByIdReturnsNull() {
 		// Arrange
@@ -201,7 +197,6 @@ public class RoomPostgresRepositoryTest {
 		assertThat(fetchedRoom).isNull();
 
 	}
-
 
 	@Test
 	public void testCatchBlockTriggeredBySQLException() throws SQLException {
@@ -218,23 +213,21 @@ public class RoomPostgresRepositoryTest {
 		// Act
 		assertThrows(RoomRepositoryException.class, () -> repository.findById("1R"));
 	}
-	
 
 	@Test
 	public void testFindByIdthrows() throws SQLException {
 		// Arrange
 		addTestRoomToDatabase("1", "Deluxe Room");
-		try(Connection connectionx = DriverManager.getConnection(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword());) {
+		try (Connection connectionx = DriverManager.getConnection(postgres.getJdbcUrl(), postgres.getUsername(),
+				postgres.getPassword());) {
 			connectionx.close();
 			RoomPostgresRepository repository = new RoomPostgresRepository(connectionx);
 			// Assert
-			assertThrows(RoomRepositoryException.class, () -> repository.findById("1R")); 
-			
-		} 
-			
-	}
-	
+			assertThrows(RoomRepositoryException.class, () -> repository.findById("1R"));
 
+		}
+
+	}
 
 	private void addTestRoomToDatabase(String id, String description) {
 		String sql = "INSERT INTO rooms ( room_number, room_description) VALUES ( ?, ?)";
