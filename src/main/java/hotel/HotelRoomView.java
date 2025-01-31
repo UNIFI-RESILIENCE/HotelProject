@@ -32,15 +32,14 @@ public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTest
 	private transient RoomController roomController;
 
 	private JButton btnPublish;
-	
+
 	private JButton btnDelete;
-	
+
 	private JList<Room> lstDisplayRooms;
 
 	private JLabel lbDisplayStatus;
 
 	private DefaultListModel<Room> listRoomsModel;
-
 
 	DefaultListModel<Room> getListRoomModel() {
 		return listRoomsModel;
@@ -50,7 +49,7 @@ public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTest
 
 		this.roomController = roomController;
 	}
-	
+
 	/**
 	 * Create the frame.
 	 */
@@ -60,7 +59,7 @@ public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTest
 
 		setBounds(100, 100, 692, 636);
 		contentPane = new JPanel();
-		
+
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -112,26 +111,21 @@ public class HotelRoomView extends JFrame implements RoomView, HotelRoomViewTest
 		btnDelete.setName("btnDelete");
 		btnDelete.setEnabled(false);
 		btnDelete.setBounds(288, 553, 140, 27);
-		btnDelete.addActionListener(e -> 
-			roomController.deleteRoom(lstDisplayRooms.getSelectedValue())
-		);
+		btnDelete.addActionListener(e -> roomController.deleteRoom(lstDisplayRooms.getSelectedValue()));
 		contentPane.add(btnDelete);
 
 		listRoomsModel = new DefaultListModel<>();
 		lstDisplayRooms = new JList<>(listRoomsModel);
 		lstDisplayRooms.setName("lstDisplayRooms");
-		lstDisplayRooms.addListSelectionListener(e -> 
-			btnDelete.setEnabled(lstDisplayRooms.getSelectedIndex() != -1)
-		);
+		lstDisplayRooms.addListSelectionListener(e -> btnDelete.setEnabled(lstDisplayRooms.getSelectedIndex() != -1));
 		lstDisplayRooms.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(lstDisplayRooms);
 
 		btnPublish = new JButton("Publish Room");
 		btnPublish.setEnabled(false);
 		btnPublish.setName("btnPublish");
-		btnPublish.addActionListener(e -> 
-			roomController.newRoom(new Room(txtRoomNumber.getText(), txtRoomDescription.getText()))
-		);
+		btnPublish.addActionListener(
+				e -> roomController.newRoom(new Room(txtRoomNumber.getText(), txtRoomDescription.getText())));
 
 		btnPublish.setBounds(31, 233, 624, 45);
 		contentPane.add(btnPublish);

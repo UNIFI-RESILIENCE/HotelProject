@@ -65,7 +65,7 @@ public class HotelRoomE2E extends AssertJSwingJUnitTestCase { //NOSONAR
 			addTestRoomToDatabase(EXISTING_ROOM_1, EXISTING_ROOM_1_DESCRIPTION);
 			addTestRoomToDatabase(EXISTING_ROOM_2, EXISTING_ROOM_2_DESCRIPTION);
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 

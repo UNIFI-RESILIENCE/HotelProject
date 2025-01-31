@@ -25,10 +25,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        dbHost: dbmanager
-        dbName: jdbc:postgresql://db:5432/hoteldb 
-        dbPassword: /Pass@098/
     environment:
       DB_USER: dbmanager
       DB_URL: jdbc:postgresql://db:5432/hoteldb
@@ -39,7 +35,7 @@ services:
     depends_on:
       - db
         
-    command:  ["sh", "-c", "java -jar /app/app.jar hotel.HotelRoomApp -dbHost dbmanager -dbName jdbc:postgresql://db:5432/hoteldb  -dbPassword /Pass@098/" ]
+    command:  ["sh", "-c", "printenv && java -cp /app/app.jar hotel.HotelRoomApp --dbHost jdbc:postgresql://db:5432/hoteldb --dbName dbmanager --dbPassword /Pass@098/" ]
 
     # command: ["sh", "-c", "ls -la / && cd app && ls -al"]
   

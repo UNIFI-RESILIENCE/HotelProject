@@ -1,6 +1,6 @@
 package hotel;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,112 +14,102 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 public class RoomPostgresRepositoryTestContainersIT {
 
-    @SuppressWarnings("resource")
+	@SuppressWarnings("resource")
 	@ClassRule
-    public static final PostgreSQLContainer<?> postgres =
-        new PostgreSQLContainer<>("postgres:16-alpine")
-            .withDatabaseName("testdb")
-            .withUsername("testuser")
-            .withPassword("testpass");
- 
-    private Connection connection;
-    private RoomPostgresRepository roomRepository;
+	public static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine")
+			.withDatabaseName("testdb").withUsername("testuser").withPassword("testpass");
 
-    @Before
-    public void setUp() throws Exception {
-        // Start the container
-        postgres.start();
+	private Connection connection;
+	private RoomPostgresRepository roomRepository;
 
-        // Retrieve dynamic database connection details
-        String jdbcUrl = postgres.getJdbcUrl();
-        String username = postgres.getUsername();
-        String password = postgres.getPassword();
+	@Before
+	public void setUp() throws Exception {
+		// Start the container
+		postgres.start();
 
-        // Connect to the database and initialize the repository
-        connection = DriverManager.getConnection(jdbcUrl, username, password);
-        roomRepository = new RoomPostgresRepository(jdbcUrl, username, password);
+		// Retrieve dynamic database connection details
+		String jdbcUrl = postgres.getJdbcUrl();
+		String username = postgres.getUsername();
+		String password = postgres.getPassword();
 
-        // Prepare the schema
-        try (Statement statement = connection.createStatement()) {
-            statement.execute("DROP TABLE IF EXISTS rooms");
-            statement.execute("CREATE TABLE rooms (room_number VARCHAR(50) PRIMARY KEY, room_description VARCHAR(1000))");
-        }
-    }
+		// Connect to the database and initialize the repository
+		connection = DriverManager.getConnection(jdbcUrl, username, password);
+		roomRepository = new RoomPostgresRepository(jdbcUrl, username, password);
 
-    @After
-    public void tearDown() throws Exception {
-        // Clean up the database
-        try (Statement statement = connection.createStatement()) {
-            statement.execute("DROP TABLE IF EXISTS rooms");
-        }
-        if (connection != null) {
-            connection.close();
-        }
+		// Prepare the schema
+		try (Statement statement = connection.createStatement()) {
+			statement.execute("DROP TABLE IF EXISTS rooms");
+			statement.execute(
+					"CREATE TABLE rooms (room_number VARCHAR(50) PRIMARY KEY, room_description VARCHAR(1000))");
+		}
+	}
 
-        // Stop the container
-        postgres.stop();
-    }
+	@After
+	public void tearDown() throws Exception {
+		// Clean up the database
+		try (Statement statement = connection.createStatement()) {
+			statement.execute("DROP TABLE IF EXISTS rooms");
+		}
+		if (connection != null) {
+			connection.close();
+		}
 
-    @Test
-    public void testFindById() {
-        // Arrange
-        Room room = new Room("1", "Luxury Suite");
-        roomRepository.save(room);
+		// Stop the container
+		postgres.stop();
+	}
 
-        // Act
-        Room fetchedRoom = roomRepository.findById("1");
+	@Test
+	public void testFindById() {
+		// Arrange
+		Room room = new Room("1", "Luxury Suite");
+		roomRepository.save(room);
 
-        // Assert
-        assertThat(fetchedRoom)
-            .isNotNull()
-            .extracting(Room::getId, Room::getDescription)
-            .containsExactly("1", "Luxury Suite");
-    }
+		// Act
+		Room fetchedRoom = roomRepository.findById("1");
 
-    @Test
-    public void testSaveAndFindById() {
-        // Arrange
-        Room room = new Room("1", "Deluxe Room");
+		// Assert
+		assertThat(fetchedRoom).isNotNull().extracting(Room::getId, Room::getDescription).containsExactly("1",
+				"Luxury Suite");
+	}
 
-        // Act
-        roomRepository.save(room);
-        Room fetchedRoom = roomRepository.findById("1");
+	@Test
+	public void testSaveAndFindById() {
+		// Arrange
+		Room room = new Room("1", "Deluxe Room");
 
-        // Assert
-        assertThat(fetchedRoom)
-            .isNotNull()
-            .extracting(Room::getId, Room::getDescription)
-            .containsExactly("1", "Deluxe Room");
-    }
+		// Act
+		roomRepository.save(room);
+		Room fetchedRoom = roomRepository.findById("1");
 
-    @Test
-    public void testFindAll() {
-        // Arrange
-        roomRepository.save(new Room("1", "Deluxe Room"));
-        roomRepository.save(new Room("2", "Standard Room"));
+		// Assert
+		assertThat(fetchedRoom).isNotNull().extracting(Room::getId, Room::getDescription).containsExactly("1",
+				"Deluxe Room");
+	}
 
-        // Act
-        var rooms = roomRepository.findAll();
+	@Test
+	public void testFindAll() {
+		// Arrange
+		roomRepository.save(new Room("1", "Deluxe Room"));
+		roomRepository.save(new Room("2", "Standard Room"));
 
-        // Assert
-        assertThat(rooms)
-            .hasSize(2)
-            .containsExactlyInAnyOrder(
-                new Room("1", "Deluxe Room"),
-                new Room("2", "Standard Room")
-            );
-    }
+		// Act
+		var rooms = roomRepository.findAll();
 
-    @Test
-    public void testDelete() {
-        // Arrange
-        roomRepository.save(new Room("1", "Deluxe Room"));
+		// Assert
+		assertThat(rooms).hasSize(2).containsExactlyInAnyOrder(new Room("1", "Deluxe Room"),
+				new Room("2", "Standard Room"));
+	}
 
-        // Act
-        roomRepository.delete("1");
-        Room fetchedRoom = roomRepository.findById("1");
+	@Test
+	public void testDelete() {
+		// Arrange
+		roomRepository.save(new Room("1", "Deluxe Room"));
 
-        // Assert
-        assertThat(fetchedRoom).isNull();
-    }
+		// Act
+		roomRepository.delete("1");
+		Room fetchedRoom = roomRepository.findById("1");
+
+		// Assert
+		assertThat(fetchedRoom).isNull();
+	}
 }

@@ -12,7 +12,7 @@ import picocli.CommandLine.Option;
 
 @Command(mixinStandardHelpOptions = true)
 public class HotelRoomApp implements Callable<Void> {
-	
+
 	private static final Logger LOGGER = LogManager.getLogger(HotelRoomApp.class);
 
 	@Option(names = { "--dbName" }, description = "Database name")
@@ -32,13 +32,10 @@ public class HotelRoomApp implements Callable<Void> {
 
 	@Override
 	public Void call() throws Exception {
-		
-		
 
 		EventQueue.invokeLater(() -> {
 
 			try {
-
 				roomRepository = new RoomPostgresRepository(dbHost, dbName, dbPassword);
 				HotelRoomView hotelRoomView = new HotelRoomView();
 				RoomController roomController = new RoomController(hotelRoomView, roomRepository);
@@ -47,7 +44,7 @@ public class HotelRoomApp implements Callable<Void> {
 				roomController.allRooms();
 
 			} catch (Exception e) {
-				
+
 				LOGGER.info(e);
 			}
 		});
