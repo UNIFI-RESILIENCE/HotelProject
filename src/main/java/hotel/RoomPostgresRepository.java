@@ -15,7 +15,6 @@ public class RoomPostgresRepository implements RoomRepository {
 	public RoomPostgresRepository(String url, String dbUser, String dbpassword) throws SQLException {
 
 		this.connection = DriverManager.getConnection(url, dbUser, dbpassword);
-
 	}
 
 	// for test
@@ -71,7 +70,6 @@ public class RoomPostgresRepository implements RoomRepository {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-
 			throw new RoomRepositoryException("Error while saving room", e);
 		}
 

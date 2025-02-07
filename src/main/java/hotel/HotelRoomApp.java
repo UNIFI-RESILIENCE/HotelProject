@@ -15,9 +15,8 @@ public class HotelRoomApp implements Callable<Void> {
 
 	private static final Logger LOGGER = LogManager.getLogger(HotelRoomApp.class);
 
-	@Option(names = { "--dbName" }, description = "Database name")
-	private String dbName = System.getenv("DB_USER");
-
+	@Option(names = { "--dbUser" }, description = "Database Username")
+	private String dbUser = System.getenv("DB_USER");
 	@Option(names = { "--dbHost" }, description = "Database Host Url")
 	private String dbHost = System.getenv("DB_URL");
 
@@ -36,7 +35,8 @@ public class HotelRoomApp implements Callable<Void> {
 		EventQueue.invokeLater(() -> {
 
 			try {
-				roomRepository = new RoomPostgresRepository(dbHost, dbName, dbPassword);
+				
+				roomRepository = new RoomPostgresRepository(dbHost, dbUser, dbPassword);
 				HotelRoomView hotelRoomView = new HotelRoomView();
 				RoomController roomController = new RoomController(hotelRoomView, roomRepository);
 				hotelRoomView.setRoomController(roomController);

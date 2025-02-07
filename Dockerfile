@@ -1,28 +1,13 @@
-#FROM eclipse-temurin:17
-FROM openjdk:17-jdk-slim
-
+FROM ubuntu:22.04
 
 ARG jarToCopy
 
-ENV DB_USER=dbmanager \
-    DB_URL=jdbc:postgresql://database:5432/hoteldb \
-    DB_PASSWORD=/Pass@098/ \
-	HOST_NAME=database
+RUN apt update && apt install -y openjdk-17-jdk x11-apps xvfb libxrender1 libxtst6 libxext6 libxi6 && \
+    apt clean && rm -rf /var/lib/apt/lists/*
 
-# Enable multi-architecture support and install required packages
-RUN dpkg --add-architecture i386 && \
-    apt update && \
-    apt install -y --no-install-recommends \
-    libxrender1 \
-    libxtst6 \
-	libxext6 \
-    libxi6 && \
-    apt clean && \
-    rm -rf /var/lib/apt/lists/* 
-
-
-#  COPY /target/$jarToCopy /app/app.jar
+RUN Xvfb :0 -screen 0 1024x768x24 &
+ENV DISPLAY=:0
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 COPY /target/hotelroom-jar-with-dependencies.jar /app/app.jar
-
-# CMD ["java", "-jar", "/app/app.jar", "hotel.Main"]

@@ -1,531 +1,319 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hotels.app</groupId>
-    <artifactId>rooms</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
- 
-    <name>rooms</name>
-   
-    <url>http://www.example.com</url>
- 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      
-  		<sonar.organization>unifi-resilience</sonar.organization>
-  		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-  		<sonar.exclusions>**/HotelRoomApp.java</sonar.exclusions> 
-       
-    </properties> 
-  
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-bom</artifactId>
-                <version>2.24.1</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+	<groupId>com.hotels.app</groupId>
+	<artifactId>rooms</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 
-    <dependencies>
-        <!-- JUnit for testing -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-           <version>[4.13.1,)</version>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
+	<name>rooms</name>
+
+	<url>http://www.rooms.com</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sonar.organization>unifi-resilience</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.exclusions>**/HotelRoomApp.java</sonar.exclusions>
+
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-bom</artifactId>
+				<version>2.24.1</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- JUnit for testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>[4.13.1,)</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-swing-junit</artifactId>
 			<version>3.17.1</version>
 			<scope>test</scope>
 		</dependency>
 
-        <!-- Log4j for logging -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-        </dependency>
+		<!-- Log4j for logging -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+		</dependency>
 
-        <!-- PostgreSQL JDBC Driver -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.7.4</version>
-        </dependency> 
+		<!-- PostgreSQL JDBC Driver -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.7.4</version>
+		</dependency>
 
-        <!-- Mockito for mocking in tests -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>4.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        
-            <dependency>
-			    <groupId>org.testcontainers</groupId>
-			    <artifactId>postgresql</artifactId>
-			    <version>1.20.0</version>
-			    <scope>test</scope>
-			</dependency>
-			
-			<dependency>
-				<groupId>info.picocli</groupId>
-				<artifactId>picocli</artifactId>
-				<version>4.6.1</version>
-			</dependency>
-    </dependencies>
+		<!-- Mockito for mocking in tests -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>4.8.1</version>
+			<scope>test</scope>
+		</dependency>
 
-    <build>
-        <finalName>hotelroom</finalName>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>1.20.0</version>
+			<scope>test</scope>
+		</dependency>
 
-        <pluginManagement>
-            <plugins>
-                <!-- Jacoco plugin for code coverage -->
+		<dependency>
+			<groupId>info.picocli</groupId>
+			<artifactId>picocli</artifactId>
+			<version>4.6.1</version>
+		</dependency>
+	</dependencies>
 
+	<build>
+		<finalName>hotelroom</finalName>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.pitest</groupId>
+					<artifactId>pitest-maven</artifactId>
+					<version>1.17.0</version>
+					<configuration>
+						<excludedClasses>
+							<param>hotel.HotelRoomApp*</param>
+							<param>hotel.HotelRoomView*</param>
+						</excludedClasses>
+						<targetClasses>
+							<param>hotel.*</param>
+						</targetClasses>
+						<targetTests>
+							<param>hotel.RoomPostgresRepositoryTest*</param>
+							<param>hotel.RoomControllerTest*</param>
+							<param>hotel.RoomTest*</param>
+						</targetTests>
+						<mutators>
+							<mutator>DEFAULTS</mutator>
+							<mutator>NON_VOID_METHOD_CALLS</mutator>
+						</mutators>
+						<mutationThreshold>10</mutationThreshold>
+					</configuration>
+				</plugin>
 
-                <!-- Pitest plugin for mutation testing -->
-                <plugin>
-                    <groupId>org.pitest</groupId>
-                    <artifactId>pitest-maven</artifactId>
-                    <version>1.17.0</version>
-                    <configuration>
-                        <excludedClasses>
-                            <param>hotel.HotelRoomApp*</param>
-                            <param>hotel.HotelRoomView*</param>
-                        </excludedClasses>
-                        <targetClasses>
-                        	 <param>hotel.*</param>
-                            
-                        </targetClasses>
-                        <targetTests>
-                        <param>hotel.RoomPostgresRepositoryTest*</param>
-                            <param>hotel.RoomControllerTest*</param>
-                            <param>hotel.RoomTest*</param>
-                        </targetTests>
-                        <mutators>
-                            <mutator>DEFAULTS</mutator>
-                            <mutator>NON_VOID_METHOD_CALLS</mutator>
-                        </mutators>  
-                        <mutationThreshold>10</mutationThreshold>
-                    </configuration>
-                </plugin>
-                
-                <plugin>
+				<plugin>
 					<artifactId>maven-surefire-report-plugin</artifactId>
 					<version>2.22.2</version>
 				</plugin>
-				
+
 				<plugin>
 					<artifactId>maven-site-plugin</artifactId>
 					<version>3.9.1</version>
 				</plugin>
-				
-		<!--   coveralls-->
-		
-		<plugin>
-			<groupId>org.eluder.coveralls</groupId>
-			<artifactId>coveralls-maven-plugin</artifactId>
-			<version>4.3.0</version>
-			<dependencies>
-			<!-- This is required when using JDK 9 or higher
-			since javax.xml.bind has been removed from the JDK -->
-			<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>2.3.1</version>
-			</dependency>
-			</dependencies>
-		</plugin>
-		
-		
-		
-		<plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.12</version>
-                    <configuration>
-	                       <excludes>
-	                            
-								<exclude>**/HotelRoomApp.*</exclude>
-	                        </excludes>
-	                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                 
-								<goal>prepare-agent</goal>
-								
-								<goal>report</goal>
-                            </goals>
-                        </execution>
-                        
-                        <execution>
-                        	<id>jacoco-check</id>
-                        	<goals>
-                        		<goal> check </goal>
-                        	</goals>
-                        	
-                        	<configuration>
-                                <rules>
-                                    <rule>
-                                        <element>PACKAGE</element>
-                                        <limits>
-                                            <limit>
-                                                <counter>LINE</counter>
-                                                <value>COVEREDRATIO</value>
-                                                <minimum>0.50</minimum>
-                                            </limit>
-                                        </limits>
-                                    </rule>
-                                </rules>
-                            </configuration>
-                        
-                        </execution>
-                       
-                    </executions>
-                   
-                </plugin>
 
-            </plugins>
-        </pluginManagement>
+				<plugin>
+					<groupId>org.eluder.coveralls</groupId>
+					<artifactId>coveralls-maven-plugin</artifactId>
+					<version>4.3.0</version>
+					<dependencies>
+						<dependency>
+							<groupId>javax.xml.bind</groupId>
+							<artifactId>jaxb-api</artifactId>
+							<version>2.3.1</version>
+						</dependency>
+					</dependencies>
+				</plugin>
 
-        <plugins>
-        
-             <plugin>
-	            <groupId>org.sonarsource.scanner.maven</groupId>
-	            <artifactId>sonar-maven-plugin</artifactId>
-	            <version>4.0.0.4121</version>
-	            <configuration>
-	                <sonar.projectKey>com.hotels.app:rooms</sonar.projectKey>
-	                <sonar.projectName>Hotel Rooms App</sonar.projectName>
-	                <sonar.branch.name>main</sonar.branch.name>
-	                <sonar.exclusions>**/HotelRoomApp.java</sonar.exclusions> 
-	            </configuration>
-        	</plugin>
-            <!-- Compiler plugin for Java version -->
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                </configuration>
-            </plugin>
-			 
-            <!-- Maven Jar Plugin for packaging -->
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.2</version>
-            </plugin>
-  
-            <!-- Maven Assembly Plugin for creating an uber-jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.1</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>hotel.HotelRoomApp</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-          
-            
-            		
-		<plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>build-helper-maven-plugin</artifactId>
-			<version>3.0.0</version>
-			<executions>
-				<execution>
-				<id>add-test-source</id>
-				<phase>generate-test-sources</phase>
-				<goals>
-					<goal>add-test-source</goal>
-				</goals>
-				<configuration>
-					<sources>
-					<source>src/it/java</source>
-					<source>src/e2e/java</source> 
-					</sources> 
-				</configuration>
-				</execution>
-			</executions>
-		</plugin>
-		
-
-            
-            <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <executions>
-                <execution>
-                    <id>default-it</id>
-                    <goals>
-                        <goal>integration-test</goal>
-                        <goal>verify</goal>
-                    </goals>
-                
-                </execution>
-                <execution>
-					<id>e2e-tests</id>
-					<goals>
-						<goal>integration-test</goal>
-						<goal>verify</goal>
-					</goals>
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>0.8.12</version>
 					<configuration>
 						<excludes>
-							<exclude>**/*IT.java</exclude>
+							<exclude>**/HotelRoomApp.*</exclude>
 						</excludes>
-						<includes>
-							<include>**/*E2E.java</include>
-						</includes>
 					</configuration>
-				</execution> 
-            </executions>
-            
-        </plugin>
-      
-        </plugins>
-    </build>
-	
+					<executions>
+						<execution>
+							<goals>
+								<goal>prepare-agent</goal>
+								<goal>report</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>jacoco-check</id>
+							<goals>
+								<goal> check </goal>
+							</goals>
+							<configuration>
+								<rules>
+									<rule>
+										<element>PACKAGE</element>
+										<limits>
+											<limit>
+												<counter>LINE</counter>
+												<value>COVEREDRATIO</value>
+												<minimum>0.50</minimum>
+											</limit>
+										</limits>
+									</rule>
+								</rules>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>4.0.0.4121</version>
+				<configuration>
+					<sonar.projectKey>com.hotels.app:rooms</sonar.projectKey>
+					<sonar.projectName>Hotel Rooms App</sonar.projectName>
+					<sonar.branch.name>main</sonar.branch.name>
+					<sonar.exclusions>**/HotelRoomApp.java</sonar.exclusions>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>17</source>
+					<target>17</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.4.2</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>hotel.HotelRoomApp</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>add-test-source</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/it/java</source>
+								<source>src/e2e/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-it</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>e2e-tests</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<excludes>
+								<exclude>**/*IT.java</exclude>
+							</excludes>
+							<includes>
+								<include>**/*E2E.java</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 	<profiles>
 		<profile>
 			<id>jacoco</id>
-				<build>
-					<plugins>
-		
-				  <plugin>
-					<!-- configured in pluginManagement -->
-					<groupId>org.jacoco</groupId>
-					<artifactId>jacoco-maven-plugin</artifactId>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
 					</plugin>
-					</plugins> 
+				</plugins>
 			</build>
 		</profile>
-		
+ 
 		<profile>
 			<id>mutation-testing</id>
 			<build>
-			<plugins>
-			<plugin>
-			<!-- configured also in pluginManagement -->
-			<groupId>org.pitest</groupId>
-			<artifactId>pitest-maven</artifactId>
-			<executions>
-				<execution>
-					<goals>
-				<goal>mutationCoverage</goal>
-				</goals>
-					<phase>verify</phase> 
-				</execution>
-			</executions>
-		</plugin>
-		</plugins>
-		</build>
-	 </profile>
-
-
-		<profile> 
-			<id>docker-compose</id>
-			<build>
 				<plugins>
-				<plugin>
-					<groupId>io.fabric8</groupId>
-					<artifactId>docker-maven-plugin</artifactId>
-					<version>0.45.1</version>
-					<extensions>true</extensions>
-					<configuration>
-						<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
-						<wait>
-						    <time>120000</time> <!-- Wait for 2 minutes -->
-						</wait>
-						<images>
-							<image>
-								<alias>app</alias>			
-							  <external> 
-							     <type>compose</type> 
-							     <basedir>${project.basedir}</basedir> 
-							     <composeFile>docker-compose.yml</composeFile>
-							  </external>
-							  
-							<run> 
-							
-							<cmd>ls</cmd>
-							<entryPoint>java -jar /app/app.jar hotel.HotelRoomApp</entryPoint>
-							 </run>
-							</image>
-							  
-						</images>
-					</configuration>
-					<executions>
-
-						<execution>
-							<id>docker-build-image</id>
-								<phase>package</phase>
-							<goals>
-								<goal>build</goal>
-							</goals>
-						</execution>
-						  
-						<execution>
-							<id>docker-verify</id>
-							<phase>verify</phase>
-							<goals>
-								<goal>start</goal>
-								
-							</goals>
-							
-						</execution>
-					</executions> 
+					<plugin>
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-maven</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>mutationCoverage</goal>
+								</goals>
+								<phase>verify</phase>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-
-		<profile> 
-			<id>docker</id>
-			<build>
-				<plugins>
-				<plugin>
-					<groupId>io.fabric8</groupId>
-					<artifactId>docker-maven-plugin</artifactId>
-					<version>0.45.1</version>
-					<extensions>true</extensions>
-					<configuration>
-						<showLogs>true</showLogs>
-						<verbose>build</verbose>
-						<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
-						<startParallel>true</startParallel>
-						<wait>
-						    <time>120000</time> <!-- Wait for 2 minutes -->
-						</wait>
-						<images>
- 
-							<image> 
-								<name>postgres:17.2</name>
-								<alias>database</alias>
-								<run>
-									<env>
-									      <POSTGRES_PASSWORD>0Pass-0980</POSTGRES_PASSWORD>
-	      								  <POSTGRES_USER>dbmanager</POSTGRES_USER> 
-	      								  <POSTGRES_DB>hoteldb</POSTGRES_DB> 
-									</env>
-									<volumes>
-	                                    <bind>
-	                                    	<volume>${project.basedir}/init-scripts:/docker-entrypoint-initdb.d</volume>
-	                                       
-	                                    </bind>
-	                                </volumes>
-									<ports>
-	                                    <port>5433:5432</port>
-	                                </ports>                            
-									<network>
-										<mode>custom</mode>
-										<name>my-network</name>
-										<alias>database</alias>
-									</network>
-									<wait>
-										<log>database system is ready to accept connections</log>
-										<time>200000</time>
-										<exec>
-											<postStart>
-												pg_isready -U dbmanager -d hoteldb -h localhost
-											</postStart>
-										</exec>
-									</wait>
-								</run>
-							  
-							</image>
-							
-							<image>
-								<name>hotelroom</name>
-								<build>
-								<contextDir>${project.basedir}</contextDir> 
-									<args>
-										<jarToCopy>/hotelroom-jar-with-dependencies.jar</jarToCopy>
-									</args>
-								</build> 
-								<run> 
-								 
-									<network>
-										<mode>custom</mode>
-										<name>my-network</name>
-										<alias>app</alias>
-									</network>
-									  <env>
-									  	 <HOST_NAME>database</HOST_NAME>
-				                        <DB_USER>dbmanager</DB_USER>
-				                        <DB_URL>jdbc:postgresql://database:5432/hoteldb</DB_URL>
-				                        <DB_PASSWORD>0Pass-0980</DB_PASSWORD>
-				                     </env>  
-									<links>
-									  <link>database</link>
-									</links>
-									
-									<dependsOn>database</dependsOn>
-									
-									<wait>
-									  
-										<time>1000</time>
-									</wait>
-									 
-									
-									<cmd>java -jar /app/app.jar hotel.HotelRoomApp</cmd>
-								</run>
-							 </image>
-							  
-						</images>
-					</configuration> 
-					<executions>
-
-						<execution>
-							<id>docker-build-image</id>
-								<phase>package</phase>
-							<goals>
-								<goal>build</goal>
-							</goals>
-						</execution>
-						  
-						<execution>
-							<id>docker-verify</id>
-							<phase>verify</phase>
-							<goals>
-								<goal>start</goal>
-								<goal>stop</goal>
-							</goals>
-						</execution>
-					</executions>  
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+		</profile> 
 	</profiles>
 </project>
