@@ -33,7 +33,7 @@ public class Room {
 
 	@Override
 	public boolean equals(Object o) {
-		 // Check if the objects are the same instance
+		// Check if the objects are the same instance
 		if (o == null)
 			return false; // Check type compatibility
 		if (getClass() != o.getClass())

@@ -44,15 +44,15 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 
 	@Override
 	protected void onSetUp() {
-		
+
 		closeable = MockitoAnnotations.openMocks(this);
 		Mockito.verifyNoMoreInteractions(roomController);
-		
+
 		GuiActionRunner.execute(() -> {
 			hotelRoomView = new HotelRoomView();
-			
+
 			hotelRoomView.setRoomController(roomController);
-			
+
 			return hotelRoomView;
 		});
 		window = new FrameFixture(robot(), hotelRoomView);
@@ -85,10 +85,10 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 	public void testWhenIdAndRoomAreNonEmptyThenAddButtonShouldBeEnabled() {
 		window.textBox("txtRoomNumber").enterText("1");
 		window.textBox("txtRoomDescription").enterText("test");
-		
+
 		assertThat(window.textBox("txtRoomNumber").text()).isEqualTo("1");
-	    assertThat(window.textBox("txtRoomDescription").text()).isEqualTo("test");
-	    window.button(JButtonMatcher.withName("btnPublish")).requireEnabled();
+		assertThat(window.textBox("txtRoomDescription").text()).isEqualTo("test");
+		window.button(JButtonMatcher.withName("btnPublish")).requireEnabled();
 	}
 
 	@Test
@@ -103,8 +103,7 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		txtRoomDescription.setText("");
 		txtRoomNumber.enterText(" ");
 		txtRoomDescription.enterText("test");
-		
-		
+
 	}
 
 	@Test
@@ -125,7 +124,7 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> hotelRoomView.showError("error message", room));
 
 		// Assert: Verify the error label shows the correct error message
-		
+
 		assertThat(window.label("lbDisplayStatus").text()).isEqualTo("error message: " + room);
 	}
 
@@ -170,21 +169,21 @@ public class HotelRoomViewTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			hotelRoomView.getListRoomModel().addElement(room1);
 		});
-		
+
 		GuiActionRunner.execute(() -> hotelRoomView.getLstDisplayRooms().setSelectedIndex(0));
-		
+
 		JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete Room"));
 		deleteButton.requireEnabled();
 		window.list("lstDisplayRooms").clearSelection();
 		assertThat(window.list("lstDisplayRooms").clearSelection().contents()).containsExactly(room1.toString());
-		
+
 	}
 
 	@Test
 	public void testAddButtonShouldDelegateToHotelRoomControllerNewRoom() {
 		window.textBox("txtRoomNumber").enterText("101");
 		window.textBox("txtRoomDescription").enterText("Test Room");
-		
+
 		GuiActionRunner.execute(() -> hotelRoomView.getBtnPublish().doClick());
 		verify(roomController).newRoom(new Room("101", "Test Room"));
 	}

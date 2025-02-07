@@ -1,48 +1,43 @@
-version: "2"
 services:
-
   db:
     image: postgres
     ports:
-      - "5434:5432" 
+      - "5434:5432"
     restart: always
     networks:
       - my-network
     environment:
-      POSTGRES_PASSWORD: /Pass@098/
-      POSTGRES_USER: dbmanager
-      POSTGRES_DB: hoteldb
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./init-scripts:/docker-entrypoint-initdb.d
       - db-data:/var/lib/postgres-data
     healthcheck:
-      test: [ "CMD", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
-      interval: 20s
+      test: ["CMD", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 30s
       timeout: 20s
       retries: 10
   app:
-    image:  hotelroom
+    image: hotelroom
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        dbHost: dbmanager
-        dbName: jdbc:postgresql://db:5432/hoteldb 
-        dbPassword: /Pass@098/
     environment:
-      DB_USER: dbmanager
-      DB_URL: jdbc:postgresql://db:5432/hoteldb
-      DB_PASSWORD: /Pass@098/
-      HOST_NAME: localhost
-    networks: 
-      - my-network  
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    networks:
+      - my-network
     depends_on:
       - db
-        
-    command:  ["sh", "-c", "java -jar /app/app.jar hotel.HotelRoomApp -dbHost dbmanager -dbName jdbc:postgresql://db:5432/hoteldb  -dbPassword /Pass@098/" ]
+    command:
+      [
+        "sh",
+        "-c",
+        "  sleep 1;  java -Djava.awt.headless=false -jar /app/app.jar --dbUser ${DB_USER} --dbHost ${DB_URL}  --dbPassword ${DB_PASSWORD}",
+      ]
 
-    # command: ["sh", "-c", "ls -la / && cd app && ls -al"]
-  
 networks:
   my-network:
     driver: bridge

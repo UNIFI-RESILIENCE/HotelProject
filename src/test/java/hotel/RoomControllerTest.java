@@ -22,7 +22,6 @@ import org.mockito.junit.VerificationCollector;
 
 public class RoomControllerTest {
 
-	
 	@Rule
 	public VerificationCollector collector = MockitoJUnit.collector();
 	@Mock

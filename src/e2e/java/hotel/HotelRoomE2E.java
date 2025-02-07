@@ -65,12 +65,12 @@ public class HotelRoomE2E extends AssertJSwingJUnitTestCase { //NOSONAR
 			addTestRoomToDatabase(EXISTING_ROOM_1, EXISTING_ROOM_1_DESCRIPTION);
 			addTestRoomToDatabase(EXISTING_ROOM_2, EXISTING_ROOM_2_DESCRIPTION);
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 
 		application("hotel.HotelRoomApp")
-				.withArgs("--dbName=" + username, "--dbHost=" + jdbcUrl, "--dbPassword=" + password).start();
+				.withArgs("--dbUser=" + username, "--dbHost=" + jdbcUrl, "--dbPassword=" + password).start();
 
 		window = WindowFinder.findFrame(new GenericTypeMatcher<JFrame>(JFrame.class) {
 			@Override
@@ -125,7 +125,6 @@ public class HotelRoomE2E extends AssertJSwingJUnitTestCase { //NOSONAR
 			statement.setString(1, id);
 			statement.setString(2, description);
 			statement.executeUpdate();
-			System.out.println(statement);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
