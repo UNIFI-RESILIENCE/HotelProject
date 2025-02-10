@@ -12,10 +12,12 @@
 &nbsp;
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=com.hotels.app%3Arooms&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=com.hotels.app%3Arooms)
 
-
+# Project 
+A simple hotel room availability application developed as part of the Advanced Java programming course in the University of Florence.
+It uses, sonarcloud, github action, end-to-end test and postgres database.
 # Project Setup
 
-This guide provides instructions on setting up and running the project using Docker Compose.
+This guide provides instructions on setting up and running the project using Docker Compose on your computer. This app has been built and tested on Ubuntu 24.0. Kindly share any error observed when you try to start this application on a windows or mac pc. 
 
 ## Prerequisites
 
