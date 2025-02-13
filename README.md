@@ -23,6 +23,8 @@ This guide provides instructions on setting up and running the project using Doc
 
 - Ensure you have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed on your system.
 - Clone the repository and navigate to the project directory.
+- mvn and java 17 configured 
+- Eclipse IDe for java developers 2024 
 
 ## Setting Up Environment Variables
 
@@ -66,12 +68,22 @@ This guide provides instructions on setting up and running the project using Doc
    ```sh
    source testenv.sh
    ```
+## Packaging the .jar file
+
+Package the jar file that is going to be copied into the working directory in the docker container by executing
+
+```sh 
+mvn package
+```
+
+This will generate a jar file with dependencies
 
 ## Running the Application
 
 Once the environment variables are set, start the application with Docker Compose:
 
 ```sh
+xhost +local:    //if you are running in a linux pc
 docker compose up
 ```
 
